@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
 test.py
 """
@@ -7,13 +9,8 @@ sys.path.append('../alpaca/')
 
 import unittest
 from test_console.test_options import TestOptions
-
-"""
-def main():
-    alltests = unittest.TestSuite([test_options.OptionsTestSuite])
-    runner = unittest.TextTestRunner()
-    runner.run(alltests)
-"""
+from test_console.test_input import TestInput
+from test_bussiness.test_regex import TestRegex
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

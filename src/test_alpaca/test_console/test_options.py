@@ -7,18 +7,12 @@ from console import options
 
 class TestOptions(unittest.TestCase):
     def setUp(self):
-        self.options = options.Options()
+        args = '-o output.dot input.regex'.split()
+        self.options = options.Options(args)
 
-    def test_get_input_path(self):
-        path = self.options.get_input_path()
-        self.assertEqual(path, '.')
+    def test_input_path(self):
+        self.assertEqual(self.options.input_path, 'input.regex')
 
-    def test_get_output_style(self):
-        style = self.options.get_output_style()
-        self.assertEqual(style, 'dot')
+    def test_output_path(self):
+        self.assertEqual(self.options.output_path, 'output.dot')
 
-"""
-OptionsTestSuite = unittest.TestSuite()
-OptionsTestSuite.addTest(TestOptions('test_get_input_path'))
-OptionsTestSuite.addTest(TestOptions('test_get_output_style'))
-"""

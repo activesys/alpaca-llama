@@ -2,12 +2,26 @@
 options.py
 """
 
+import getopt
+import sys
+
 class Options:
-    def __init__(self):
-        pass
+    def __init__(self, args):
+        try:
+            optlist, args = getopt.getopt(args, 'o:')
+        except getopt.GetoptErr as err:
+            print(err)
+            sys.exit(2)
 
-    def get_input_path(self):
-        return "."
+        for option, value in optlist:
+            if option == '-o':
+                self.output_path = value
+                break
+        else:
+            self.output_path = 'stdout'
 
-    def get_output_style(self):
-        return "dot"
+        if len(args) > 0:
+            self.input_path = args[0]
+        else:
+            self.input_path = 'stdin'
+
