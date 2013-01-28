@@ -18,10 +18,10 @@ class Options:
                 self.output_path = value
                 break
         else:
-            self.output_path = 'stdout'
+            self.output_path = '-'
 
         if len(args) > 0:
             self.input_path = args[0]
         else:
-            self.input_path = 'stdin'
+            self.input_path = '-'
 

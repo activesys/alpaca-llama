@@ -10,6 +10,7 @@ sys.path.append('../alpaca/')
 import unittest
 from test_console.test_options import TestOptions
 from test_console.test_input import TestInput
+from test_console.test_output import TestOutput
 from test_bussiness.test_regex import TestRegex
 
 if __name__ == '__main__':
