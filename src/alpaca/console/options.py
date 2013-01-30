@@ -6,7 +6,7 @@ import getopt
 import sys
 
 class Options:
-    def __init__(self, args):
+    def __init__(self, args=[]):
         try:
             optlist, args = getopt.getopt(args, 'o:')
         except getopt.GetoptErr as err:
