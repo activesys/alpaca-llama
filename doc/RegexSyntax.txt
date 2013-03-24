@@ -1,0 +1,109 @@
+REGEX ::= UNION | SIMPLE
+UNION ::= REGEX '|' SIMPLE
+SIMPLE ::= CONCATENATION | BASIC
+CONCATENATION ::= SIMPLE BASIC
+BASIC ::= KLEENE_CLOSURE | POSITIVE_CLOSURE | ELEMENTARY
+KLEENE_CLOSURE ::= ELEMENTARY '*'
+POSITIVE_CLOSURE ::= ELEMENTARY '+'
+ELEMENTARY ::= GROUP | '.' | operand | SET
+GROUP ::= '(' REGEX ')'
+SET ::= POSITIVE_SET | NEGATIVE_SET
+POSITIVE_SET ::= '[' ITEMS ']'
+NEGATIVE_SET ::= '[' '^' ITEMS ']'
+ITEMS ::= ITEM | ITEM ITEMS
+ITEM ::= RANGE | operand
+RANGE ::= operand '-' operand
+
+# STEP 1 : Eliminate left recursion
+REGEX ::= UNION | SIMPLE
+UNION ::= SIMPLE '|' SIMPLE UNION_ELR
+UNION_ELR ::= '|' SIMPLE UNION_ELR | $
+SIMPLE ::= CONCATENATION | BASIC
+CONCATENATION ::= BASIC BASIC CONCATENATION_ELR
+CONCATENATION_ELR ::= BASIC CONCATENATION_ELR | $
+BASIC ::= KLEENE_CLOSURE | POSITIVE_CLOSURE | ELEMENTARY
+KLEENE_CLOSURE ::= ELEMENTARY '*'
+POSITIVE_CLOSURE ::= ELEMENTARY '+'
+ELEMENTARY ::= GROUP | '.' | operand | SET
+GROUP ::= '(' REGEX ')'
+SET ::= POSITIVE_SET | NEGATIVE_SET
+POSITIVE_SET ::= '[' ITEMS ']'
+NEGATIVE_SET ::= '[' '^' ITEMS ']'
+ITEMS ::= ITEM | ITEM ITEMS
+ITEM ::= RANGE | operand
+RANGE ::= operand '-' operand
+
+# STEP 2 : Eliminate left recursion
+REGEX ::= SIMPLE UNION_ELR
+UNION_ELR ::= '|' SIMPLE UNION_ELR | $
+SIMPLE ::= BASIC CONCATENATION_ELR
+CONCATENATION_ELR ::= BASIC CONCATENATION_ELR | $
+BASIC ::= ELEMENTARY BASIC_ECF
+BASIC_ECF ::= '*' | '+' | $
+ELEMENTARY ::= GROUP | '.' | operand | SET
+GROUP ::= '(' REGEX ')'
+SET ::= '[' SET_ECF
+SET_ECF ::= ITEMS ']' | '^' ITEMS ']'
+ITEMS ::= ITEM ITEMS_ECF
+ITEMS_ECF ::= $ | ITEMS
+ITEM ::= operand ITEM_ECF
+ITEM_ECF ::= '-' operand | $
+
+# STEP 3 : first set
+first(REGEX) =  {'(', '.', operand, '['}
+first(UNION_ELR) = {'|', $}
+first(SIMPLE) = {'(', '.', operand, '['}
+first(CONCATENATION_ELR) = {'(', '.', operand, '[', $}
+first(BASIC) =  {'(', '.', operand, '['}
+first(BASIC_ECF) = {'*', '+', $}
+first(ELEMENTARY) = {'(', '.', operand, '['}
+first(GROUP) = {'('}
+first(SET) = {'['}
+first(SET_ECF) = {operand, '^'}
+first(ITEMS) = {operand}
+first(ITEMS_ECF) = {operand, $}
+first(ITEM) = {operand}
+first(ITEM_ECF) = {'-', $}
+
+# STEP 4 : follow set
+follow(REGEX) = {#, ')'}
+follow(UNION_ELR) = {#, ')'}
+follow(SIMPLE) = {'|', #, ')'}
+follow(CONCATENATION_ELR) = {'|', #, ')'}
+follow(BASIC) = {'(', '.', operand, '[', '|', #, ')'}
+follow(BASIC_ECF) = {'(, '.', operand, '[', '|', #, ')'}
+follow(ELEMENTARY) = {'*', '+', '(', '.', operand, '[', '|', #, ')'}
+follow(GROUP) = {'*', '+', '(', '.', operand, '[', '|', #, ')'}
+follow(SET) = {'*', '+', '(', '.', operand, '[', '|', #, ')'}
+follow(SET_ECF) = {'*', '+', '(', '.', operand, '[', '|', #, ')'}
+follow(ITEMS) = {']'}
+follow(ITEMS_ECF) =  {']'}
+follow(ITEM) = {operand, ']'}
+follow(ITEM_ECF) = {operand, ']'}
+
+# STEP 5 : select set
+select(REGEX ::= SIMPLE UNION_ELR) = {'(', '.', operand, '['}
+select(UNION_ELR ::= '|' SIMPLE UNION_ELR) = {'|'}
+select(UNION_ELR ::= $) = {#, ')'}
+select(SIMPLE ::= BASIC CONCATENATION_ELR) = {'(', '.', operand, '['}
+select(CONCATENATION_ELR ::= BASIC CONCATENATION_ELR) = {'(', '.', operand, '['}
+select(CONCATENATION_ELR ::= $) = {'|', #, ')'}
+select(BASIC ::= ELEMENTARY BASIC_ECF) = {'(', '.', operand, '['}
+select(BASIC_ECF ::= '*') = {'*'}
+select(BASIC_ECF ::= '+') = {'+'}
+select(BASIC_ECF ::= $) = {'(', '.', operand, '[', '|', #, ')'}
+select(ELEMENTARY ::= GROUP) = {'('}
+select(ELEMENTARY ::= '.') = {'.'}
+select(ELEMENTARY ::= operand) = {operand}
+select(ELEMENTARY ::= SET) = {'['}
+select(GROUP :: = '(' REGEX ')') = {'('}
+select(SET ::= '[') = {'['}
+select(SET_ECF ::= ITEMS ']') = {operand}
+select(SET_ECF ::= '^' ITEMS ']') = {'^'}
+select(ITEMS ::= ITEM ITEMS_ECF) = {operand}
+select(ITEMS_ECF ::= ITEMS) = {operand}
+select(ITEMS_ECF ::= $) = {']'}
+select(ITEM ::= operand ITEM_ECF) = {operand}
+select(ITEM_ECF ::= '-' operand) = {'-'}
+select(ITEM_ECF ::= $) = {operand, ']'}
+
