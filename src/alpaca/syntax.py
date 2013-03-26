@@ -3,6 +3,7 @@ syntax.py
 
 Syntax Pasrse for Regex
 """
+
 from rast import RAST
 from lex import LexParser
 
@@ -14,7 +15,14 @@ class SyntaxParser:
         self.lex = LexParser(regex)
 
     def build(self):
-        return self.__parse_regex()
+        self.root = self.__parse_regex()
+        # check redundancy character.
+        if not self.token[0] or self.token[1] != 'EOR':
+            raise SyntaxParserError(
+                'Regex Syntax Error: we need EOR, but we encount "%s"!'
+                % self.token[1])
+
+        return self.root
 
     def __parse_regex(self):
         self.token = self.lex.get_token()
@@ -31,13 +39,13 @@ class SyntaxParser:
                 return elem
         else:
             raise SyntaxParserError(
-                'Regex Syntax Error: we need "(", ".", "[" or operand, but we encount %s!'
+                'Regex Syntax Error: we need "(", ".", "[" or operand, but we encount "%s"!'
                 % self.token[1])
 
     def __parse_union_elr(self, root):
         # select(UNION_ELR ::= '|' SIMPLE UNION_ELR) = {'|'}
         # select(UNION_ELR ::= $) = {#, ')'}
-        if self.token[0] and self.token[1] is '|':
+        if self.token[0] and self.token[1] == '|':
             root.operator = self.token[1]
             self.token = self.lex.get_token()
             root.children.append(self.__parse_simple())
@@ -46,7 +54,7 @@ class SyntaxParser:
             return
         else:
             raise SyntaxParserError(
-                'Regex Syntax Error: we need "|", ")" or EOR, but we encount %s!'
+                'Regex Syntax Error: we need "|", ")" or EOR, but we encount "%s"!'
                 % self.token[1])
 
     def __parse_simple(self):
@@ -62,7 +70,7 @@ class SyntaxParser:
                 return elem
         else:
             raise SyntaxParserError(
-                'Regex Syntax Error: we need "(", ".", "[" or operand, but we encount %s!'
+                'Regex Syntax Error: we need "(", ".", "[" or operand, but we encount "%s"!'
                 % self.token[1])
 
     def __parse_concatenation_elr(self, root):
@@ -75,7 +83,7 @@ class SyntaxParser:
             return
         else:
             raise SyntaxParserError(
-                'Regex Syntax Error: we need "(", ".", "[", operand or "|", ")", EOR, but we encount %s!'
+                'Regex Syntax Error: we need "(", ".", "[", operand or "|", ")", EOR, but we encount "%s"!'
                 % self.token[1])
 
     def __parse_basic(self):
@@ -94,15 +102,15 @@ class SyntaxParser:
         # select(BASIC_ECF ::= '+') = {'+'}
         # select(BASIC_ECF ::= empty) = {'(', '.', operand, '[', '|', eor, ')'}
         root = RAST()
-        if self.token[0] and self.token[1] is '*' or '+':
+        if self.token[0] and self.token[1] in ['*', '+']:
             root.operator = self.token[1]
             self.token = self.lex.get_token()
             return root
-        elif not self.tokne[0] or self.token[1] in ['(', '.', '[', '|', ')', 'EOR']:
+        elif not self.token[0] or self.token[1] in ['(', '.', '[', '|', ')', 'EOR']:
             return root
         else:
             raise SyntaxParserError(
-                'Regex Syntax Error: we need "(", ".", "[", operand or "|", ")", EOR, but we encount %s!'
+                'Regex Syntax Error: we need "(", ".", "[", operand or "|", ")", EOR, but we encount "%s"!'
                 % self.token[1])
 
     def __parse_elementary(self):
@@ -110,46 +118,47 @@ class SyntaxParser:
         # select(ELEMENTARY ::= SET) = {'['}
         # select(ELEMENTARY ::= '.') = {'.'}
         # select(ELEMENTARY ::= operand) = {operand}
-        if self.token[0] and self.token[1] is '|':
+        if self.token[0] and self.token[1] == '(':
             return self.__parse_group()
-        elif self.token[0] and self.token[1] is '[':
+        elif self.token[0] and self.token[1] == '[':
             return self.__parse_set()
-        elif not self.token[0] or self.token[1] is '.':
+        elif not self.token[0] or self.token[1] == '.':
             root = RAST()
             root.operator = self.token[1]
             self.token = self.lex.get_token()
             return root
         else:
             raise SyntaxParserError(
-                'Regex Syntax Error: we need "(", ".", "[" or operand, but we encount %s!'
+                'Regex Syntax Error: we need "(", ".", "[" or operand, but we encount "%s"!'
                 % self.token[1])
 
     def __parse_group(self):
         # select(GROUP ::= '(' REGEX ')') = {'('}
-        if self.token[0] and self.token[1] is '(':
+        if self.token[0] and self.token[1] == '(':
             root = self.__parse_regex()
-            if self.token[0] and self.token[1] is ')':
+            if self.token[0] and self.token[1] == ')':
                 self.token = self.lex.get_token()
             else:
                 raise SyntaxParserError(
-                    'Regex Syntax Error: we need ")", but we encount %s!'
+                    'Regex Syntax Error: we need ")", but we encount "%s"!'
                     % self.token[1])
             return root
         else:
             raise SyntaxParserError(
-                'Regex Syntax Error: we need "(", but we encount %s!'
+                'Regex Syntax Error: we need "(", but we encount "%s"!'
                 % self.token[1])
 
     def __parse_set(self):
         # select(SET ::= '[' SET_ECF) = {'['}
-        if self.token[0] and self.token[1] is '[':
+        if self.token[0] and self.token[1] == '[':
             root = RAST()
             root.operator = self.token[1]
             self.token = self.lex.get_token(inset=True, firstchar=True)
-            return self.__parse_set_ecf(root)
+            self.__parse_set_ecf(root)
+            return root
         else:
             raise SyntaxParserError(
-                'Regex Syntax Error: we need "[", but we encount %s!'
+                'Regex Syntax Error: we need "[", but we encount "%s"!'
                 % self.token[1])
 
     def __parse_set_ecf(self, root):
@@ -157,21 +166,21 @@ class SyntaxParser:
         # select(SET_ECF ::= '^' ITEMS ']') = {'^'}
         if not self.token[0]:
             self.__parse_items(root)
-        elif self.token[0] and self.token[1] is '^':
+        elif self.token[0] and self.token[1] == '^':
             root.operator += self.token[1]
             self.token = self.lex.get_token(inset=True)
             self.__parse_items(root)
         else:
             raise SyntaxParserError(
-                'Regex Syntax Error: we need "^" or operand, but we encount %s!'
+                'Regex Syntax Error: we need "^" or operand, but we encount "%s"!'
                 % self.token[1])
 
-        if self.token[0] and self.token[1] is ']':
+        if self.token[0] and self.token[1] == ']':
             root.operator += self.token[1]
             self.token = self.lex.get_token()
         else:
             raise SyntaxParserError(
-                'Regex Syntax Error: we need "]", but we encount %s!'
+                'Regex Syntax Error: we need "]", but we encount "%s"!'
                 % self.token[1])
 
     def __parse_items(self, root):
@@ -181,7 +190,7 @@ class SyntaxParser:
             self.__parse_items_ecf(root)
         else:
             raise SyntaxParserError(
-                'Regex Syntax Error: we need operand, but we encount %s!'
+                'Regex Syntax Error: we need operand, but we encount "%s"!'
                 % self.token[1])
 
     def __parse_items_ecf(self, root):
@@ -189,11 +198,11 @@ class SyntaxParser:
         # select(ITEMS_ECF ::= empty) = {']'}
         if not self.token[0]:
             self.__parse_items(root)
-        elif self.token[0] and self.token[1] is ']':
+        elif self.token[0] and self.token[1] == ']':
             return
         else:
             raise SyntaxParserError(
-                'Regex Syntax Error: we need "]" or operand, but we encount %s!'
+                'Regex Syntax Error: we need "]" or operand, but we encount "%s"!'
                 % self.token[1])
 
     def __parse_item(self):
@@ -210,28 +219,30 @@ class SyntaxParser:
                 return elem
         else: 
             raise SyntaxParserError(
-                'Regex Syntax Error: we need operand, but we encount %s!'
+                'Regex Syntax Error: we need operand, but we encount "%s"!'
                 % self.token[1])
 
     def __parse_item_ecf(self):
         # select(ITEM_ECF ::= '-' operand) = {'-'}
         # select(ITEM_ECF ::= empty) = {operand, ']'}
         root = RAST()
-        if self.token[0] and self.token[1] is '-':
+        if self.token[0] and self.token[1] == '-':
             root.operator = self.token[1]
             self.token = self.lex.get_token(inset=True)
             if not self.token[0]:
-                root.children.append(self.token[1])
+                elem = RAST()
+                elem.operator = self.token[1]
+                root.children.append(elem)
                 self.token = self.lex.get_token(inset=True)
                 return root
             else:
                 raise SyntaxParserError(
-                    'Regex Syntax Error: we need operand, but we encount %s!'
+                    'Regex Syntax Error: we need operand, but we encount "%s"!'
                     % self.token[1])
-        elif not self.token[0] or self.token[1] is ']':
+        elif not self.token[0] or self.token[1] == ']':
             return root
         else:
             raise SyntaxParserError(
-                'Regex Syntax Error: we need "]" or operand, but we encount %s!'
+                'Regex Syntax Error: we need "]" or operand, but we encount "%s"!'
                 % self.token[1])
 
