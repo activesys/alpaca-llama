@@ -5,7 +5,7 @@ unittesting for syntax parser.
 """
 
 import unittest
-from ast import AST
+from rast import RAST
 from syntax import SyntaxParser
 
 class TestSyntaxParser(unittest.TestCase):

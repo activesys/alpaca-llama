@@ -17,10 +17,10 @@ RANGE ::= operand '-' operand
 # STEP 1 : Eliminate left recursion
 REGEX ::= UNION | SIMPLE
 UNION ::= SIMPLE '|' SIMPLE UNION_ELR
-UNION_ELR ::= '|' SIMPLE UNION_ELR | $
+UNION_ELR ::= '|' SIMPLE UNION_ELR | empty
 SIMPLE ::= CONCATENATION | BASIC
 CONCATENATION ::= BASIC BASIC CONCATENATION_ELR
-CONCATENATION_ELR ::= BASIC CONCATENATION_ELR | $
+CONCATENATION_ELR ::= BASIC CONCATENATION_ELR | empty
 BASIC ::= KLEENE_CLOSURE | POSITIVE_CLOSURE | ELEMENTARY
 KLEENE_CLOSURE ::= ELEMENTARY '*'
 POSITIVE_CLOSURE ::= ELEMENTARY '+'
@@ -35,47 +35,47 @@ RANGE ::= operand '-' operand
 
 # STEP 2 : Eliminate left recursion
 REGEX ::= SIMPLE UNION_ELR
-UNION_ELR ::= '|' SIMPLE UNION_ELR | $
+UNION_ELR ::= '|' SIMPLE UNION_ELR | empty
 SIMPLE ::= BASIC CONCATENATION_ELR
-CONCATENATION_ELR ::= BASIC CONCATENATION_ELR | $
+CONCATENATION_ELR ::= BASIC CONCATENATION_ELR | empty
 BASIC ::= ELEMENTARY BASIC_ECF
-BASIC_ECF ::= '*' | '+' | $
+BASIC_ECF ::= '*' | '+' | empty
 ELEMENTARY ::= GROUP | '.' | operand | SET
 GROUP ::= '(' REGEX ')'
 SET ::= '[' SET_ECF
 SET_ECF ::= ITEMS ']' | '^' ITEMS ']'
 ITEMS ::= ITEM ITEMS_ECF
-ITEMS_ECF ::= $ | ITEMS
+ITEMS_ECF ::= empty | ITEMS
 ITEM ::= operand ITEM_ECF
-ITEM_ECF ::= '-' operand | $
+ITEM_ECF ::= '-' operand | empty
 
 # STEP 3 : first set
 first(REGEX) =  {'(', '.', operand, '['}
-first(UNION_ELR) = {'|', $}
+first(UNION_ELR) = {'|', empty}
 first(SIMPLE) = {'(', '.', operand, '['}
-first(CONCATENATION_ELR) = {'(', '.', operand, '[', $}
+first(CONCATENATION_ELR) = {'(', '.', operand, '[', empty}
 first(BASIC) =  {'(', '.', operand, '['}
-first(BASIC_ECF) = {'*', '+', $}
+first(BASIC_ECF) = {'*', '+', empty}
 first(ELEMENTARY) = {'(', '.', operand, '['}
 first(GROUP) = {'('}
 first(SET) = {'['}
 first(SET_ECF) = {operand, '^'}
 first(ITEMS) = {operand}
-first(ITEMS_ECF) = {operand, $}
+first(ITEMS_ECF) = {operand, empty}
 first(ITEM) = {operand}
-first(ITEM_ECF) = {'-', $}
+first(ITEM_ECF) = {'-', empty}
 
 # STEP 4 : follow set
-follow(REGEX) = {#, ')'}
-follow(UNION_ELR) = {#, ')'}
-follow(SIMPLE) = {'|', #, ')'}
-follow(CONCATENATION_ELR) = {'|', #, ')'}
-follow(BASIC) = {'(', '.', operand, '[', '|', #, ')'}
-follow(BASIC_ECF) = {'(, '.', operand, '[', '|', #, ')'}
-follow(ELEMENTARY) = {'*', '+', '(', '.', operand, '[', '|', #, ')'}
-follow(GROUP) = {'*', '+', '(', '.', operand, '[', '|', #, ')'}
-follow(SET) = {'*', '+', '(', '.', operand, '[', '|', #, ')'}
-follow(SET_ECF) = {'*', '+', '(', '.', operand, '[', '|', #, ')'}
+follow(REGEX) = {eor, ')'}
+follow(UNION_ELR) = {eor, ')'}
+follow(SIMPLE) = {'|', eor, ')'}
+follow(CONCATENATION_ELR) = {'|', eor, ')'}
+follow(BASIC) = {'(', '.', operand, '[', '|', eor, ')'}
+follow(BASIC_ECF) = {'(, '.', operand, '[', '|', eor, ')'}
+follow(ELEMENTARY) = {'*', '+', '(', '.', operand, '[', '|', eor, ')'}
+follow(GROUP) = {'*', '+', '(', '.', operand, '[', '|', eor, ')'}
+follow(SET) = {'*', '+', '(', '.', operand, '[', '|', eor, ')'}
+follow(SET_ECF) = {'*', '+', '(', '.', operand, '[', '|', eor, ')'}
 follow(ITEMS) = {']'}
 follow(ITEMS_ECF) =  {']'}
 follow(ITEM) = {operand, ']'}
@@ -84,26 +84,26 @@ follow(ITEM_ECF) = {operand, ']'}
 # STEP 5 : select set
 select(REGEX ::= SIMPLE UNION_ELR) = {'(', '.', operand, '['}
 select(UNION_ELR ::= '|' SIMPLE UNION_ELR) = {'|'}
-select(UNION_ELR ::= $) = {#, ')'}
+select(UNION_ELR ::= empty) = {eor, ')'}
 select(SIMPLE ::= BASIC CONCATENATION_ELR) = {'(', '.', operand, '['}
 select(CONCATENATION_ELR ::= BASIC CONCATENATION_ELR) = {'(', '.', operand, '['}
-select(CONCATENATION_ELR ::= $) = {'|', #, ')'}
+select(CONCATENATION_ELR ::= empty) = {'|', eor, ')'}
 select(BASIC ::= ELEMENTARY BASIC_ECF) = {'(', '.', operand, '['}
 select(BASIC_ECF ::= '*') = {'*'}
 select(BASIC_ECF ::= '+') = {'+'}
-select(BASIC_ECF ::= $) = {'(', '.', operand, '[', '|', #, ')'}
+select(BASIC_ECF ::= empty) = {'(', '.', operand, '[', '|', eor, ')'}
 select(ELEMENTARY ::= GROUP) = {'('}
 select(ELEMENTARY ::= '.') = {'.'}
 select(ELEMENTARY ::= operand) = {operand}
 select(ELEMENTARY ::= SET) = {'['}
 select(GROUP :: = '(' REGEX ')') = {'('}
-select(SET ::= '[') = {'['}
+select(SET ::= '[' SET_ECF) = {'['}
 select(SET_ECF ::= ITEMS ']') = {operand}
 select(SET_ECF ::= '^' ITEMS ']') = {'^'}
 select(ITEMS ::= ITEM ITEMS_ECF) = {operand}
 select(ITEMS_ECF ::= ITEMS) = {operand}
-select(ITEMS_ECF ::= $) = {']'}
+select(ITEMS_ECF ::= empty) = {']'}
 select(ITEM ::= operand ITEM_ECF) = {operand}
 select(ITEM_ECF ::= '-' operand) = {'-'}
-select(ITEM_ECF ::= $) = {operand, ']'}
+select(ITEM_ECF ::= empty) = {operand, ']'}
 
