@@ -40,15 +40,85 @@ class TestSyntaxParserError(unittest.TestCase):
         else:
             self.assertTrue(False)
 
-    #def test_build_error_union_clr(self):
-        #self.syntax = SyntaxParser('a\\')
-        #try:
-            #self.syntax.build()
-        #except SyntaxParserError as err:
-            #msg = 'Regex Syntax Error: we need "|", ")" or EOR, but we encount "\\"!'
-            #self.assertEqual(err.args[0], msg)
-        #else:
-            #self.assertTrue(False)
+    def test_build_error_group_missing_right_parenthesis(self):
+        self.syntax = SyntaxParser('(a')
+        try:
+            self.syntax.build()
+        except SyntaxParserError as err:
+            msg = 'Regex Syntax Error: we need ")", but we encount "EOR"!'
+            self.assertEqual(err.args[0], msg)
+        else:
+            self.assertTrue(False)
+
+    def test_build_error_set_firstchar(self):
+        self.syntax = SyntaxParser('[-a]')
+        try:
+            self.syntax.build()
+        except SyntaxParserError as err:
+            msg = 'Regex Syntax Error: we need "^" or operand, but we encount "-"!'
+            self.assertEqual(err.args[0], msg)
+        else:
+            self.assertTrue(False)
+
+    def test_build_error_set_missing_right_brackets(self):
+        self.syntax = SyntaxParser('[a')
+        try:
+            self.syntax.build()
+        except SyntaxParserError as err:
+            msg = 'Regex Syntax Error: we need "-", "]" or operand, but we encount "EOR"!'
+            self.assertEqual(err.args[0], msg)
+        else:
+            self.assertTrue(False)
+
+    def test_build_error_pset_empty(self):
+        self.syntax = SyntaxParser('[]')
+        try:
+            self.syntax.build()
+        except SyntaxParserError as err:
+            msg = 'Regex Syntax Error: we need "^" or operand, but we encount "]"!'
+            self.assertEqual(err.args[0], msg)
+        else:
+            self.assertTrue(False)
+
+    def test_build_error_nset_empty(self):
+        self.syntax = SyntaxParser('[^]')
+        try:
+            self.syntax.build()
+        except SyntaxParserError as err:
+            msg = 'Regex Syntax Error: we need operand, but we encount "]"!'
+            self.assertEqual(err.args[0], msg)
+        else:
+            self.assertTrue(False)
+
+    def test_build_error_range(self):
+        self.syntax = SyntaxParser('[a--]')
+        try:
+            self.syntax.build()
+        except SyntaxParserError as err:
+            msg = 'Regex Syntax Error: we need operand, but we encount "-"!'
+            self.assertEqual(err.args[0], msg)
+        else:
+            self.assertTrue(False)
+
+    def test_build_error_range_semantics_equal(self):
+        self.syntax = SyntaxParser('[a-a]')
+        try:
+            self.syntax.build()
+        except SyntaxParserError as err:
+            msg = 'Regex Semantics Error: we encount a invalid range "a-a"!'
+            self.assertEqual(err.args[0], msg)
+        else:
+            self.assertTrue(False)
+
+    def test_build_error_range_semantics(self):
+        self.syntax = SyntaxParser('[z-a]')
+        try:
+            self.syntax.build()
+        except SyntaxParserError as err:
+            msg = 'Regex Semantics Error: we encount a invalid range "z-a"!'
+            self.assertEqual(err.args[0], msg)
+        else:
+            self.assertTrue(False)
 
 
 class TestSyntaxParser(unittest.TestCase):

@@ -214,7 +214,13 @@ class SyntaxParser:
             root = self.__parse_item_ecf()
             if not root.is_empty():
                 root.children.insert(0, elem)
-                return root
+                # We got a range, check validity of the range now.
+                if root.children[0].operator < root.children[1].operator:
+                    return root
+                else:
+                    raise SyntaxParserError(
+                        'Regex Semantics Error: we encount a invalid range "%s%s%s"!'
+                        % (root.children[0].operator, root.operator, root.children[1].operator))
             else:
                 return elem
         else: 
@@ -243,6 +249,6 @@ class SyntaxParser:
             return root
         else:
             raise SyntaxParserError(
-                'Regex Syntax Error: we need "]" or operand, but we encount "%s"!'
+                'Regex Syntax Error: we need "-", "]" or operand, but we encount "%s"!'
                 % self.token[1])
 
