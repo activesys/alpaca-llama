@@ -5,7 +5,6 @@ test.py
 """
 
 import sys
-import pdb
 sys.path.append('../alpaca/')
 
 import unittest
