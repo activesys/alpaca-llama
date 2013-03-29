@@ -15,6 +15,7 @@ from test_syntax import TestSyntaxParser
 from test_syntax import TestSyntaxParserError
 from test_graph import TestGraph
 from test_rast import TestRAST
+from test_charset import TestCharacterSet
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
