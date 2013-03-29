@@ -83,7 +83,7 @@ class CharacterSet:
         if end == None:
             return CharacterSet.set[:].remove(begin)
         else:
-            set = CharacterSet.set[:]
-            del set[CharacterSet.set.index(begin) : CharacterSet.set.index(end)+1]
-            return set
+            cset = CharacterSet.set[:]
+            del cset[CharacterSet.set.index(begin) : CharacterSet.set.index(end)+1]
+            return cset
 

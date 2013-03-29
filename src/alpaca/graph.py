@@ -75,5 +75,5 @@ class Graph:
         self.adjlist[self.finish].extend([(self.start, ''), (vcount+1, '')])
         self.adjlist[vcount].extend([(self.start, ''), (vcount+1, '')])
         self.start = vcount
-        self.finish = vcount+1
+        self.finish = vcount + 1
 
