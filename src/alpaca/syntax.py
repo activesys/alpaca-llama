@@ -46,7 +46,7 @@ class SyntaxParser:
         # select(UNION_ELR ::= '|' SIMPLE UNION_ELR) = {'|'}
         # select(UNION_ELR ::= $) = {#, ')'}
         if self.token[0] and self.token[1] == '|':
-            root.operator = self.token[1]
+            root.is_operator, root.token = self.token
             self.token = self.lex.get_token()
             root.children.append(self.__parse_simple())
             self.__parse_union_elr(root)
@@ -77,6 +77,7 @@ class SyntaxParser:
         # select(CONCATENATION_ELR ::= BASIC CONCATENATION_ELR) = {'(', '.', operand, '['}
         # select(CONCATENATION_ELR ::= $) = {'|', #, ')'}
         if not self.token[0] or self.token[1] in ['(', '.', '[']:
+            root.is_operator = True
             root.children.append(self.__parse_basic())
             self.__parse_concatenation_elr(root)
         elif self.token[0] and self.token[1] in ['|', ')', 'EOR']:
@@ -103,7 +104,7 @@ class SyntaxParser:
         # select(BASIC_ECF ::= empty) = {'(', '.', operand, '[', '|', eor, ')'}
         root = RAST()
         if self.token[0] and self.token[1] in ['*', '+']:
-            root.operator = self.token[1]
+            root.is_operator, root.token = self.token
             self.token = self.lex.get_token()
             return root
         elif not self.token[0] or self.token[1] in ['(', '.', '[', '|', ')', 'EOR']:
@@ -124,7 +125,7 @@ class SyntaxParser:
             return self.__parse_set()
         elif not self.token[0] or self.token[1] == '.':
             root = RAST()
-            root.operator = self.token[1]
+            root.is_operator, root.token = self.token
             self.token = self.lex.get_token()
             return root
         else:
@@ -152,7 +153,7 @@ class SyntaxParser:
         # select(SET ::= '[' SET_ECF) = {'['}
         if self.token[0] and self.token[1] == '[':
             root = RAST()
-            root.operator = self.token[1]
+            root.is_operator, root.token = self.token
             self.token = self.lex.get_token(inset=True, firstchar=True)
             self.__parse_set_ecf(root)
             return root
@@ -167,7 +168,8 @@ class SyntaxParser:
         if not self.token[0]:
             self.__parse_items(root)
         elif self.token[0] and self.token[1] == '^':
-            root.operator += self.token[1]
+            root.is_operator = self.token[0]
+            root.token += self.token[1]
             self.token = self.lex.get_token(inset=True)
             self.__parse_items(root)
         else:
@@ -176,7 +178,8 @@ class SyntaxParser:
                 % self.token[1])
 
         if self.token[0] and self.token[1] == ']':
-            root.operator += self.token[1]
+            root.is_operator = self.token[0]
+            root.token += self.token[1]
             self.token = self.lex.get_token()
         else:
             raise SyntaxParserError(
@@ -209,18 +212,18 @@ class SyntaxParser:
         # select(ITEM ::= operand ITEM_ECF) = {operand}
         if not self.token[0]:
             elem = RAST()
-            elem.operator = self.token[1]
+            elem.is_operator, elem.token = self.token
             self.token = self.lex.get_token(inset=True)
             root = self.__parse_item_ecf()
             if not root.is_empty():
                 root.children.insert(0, elem)
                 # We got a range, check validity of the range now.
-                if root.children[0].operator < root.children[1].operator:
+                if root.children[0].token < root.children[1].token:
                     return root
                 else:
                     raise SyntaxParserError(
                         'Regex Semantics Error: we encount a invalid range "%s%s%s"!'
-                        % (root.children[0].operator, root.operator, root.children[1].operator))
+                        % (root.children[0].token, root.token, root.children[1].token))
             else:
                 return elem
         else: 
@@ -233,11 +236,11 @@ class SyntaxParser:
         # select(ITEM_ECF ::= empty) = {operand, ']'}
         root = RAST()
         if self.token[0] and self.token[1] == '-':
-            root.operator = self.token[1]
+            root.is_operator, root.token = self.token
             self.token = self.lex.get_token(inset=True)
             if not self.token[0]:
                 elem = RAST()
-                elem.operator = self.token[1]
+                elem.is_operator, elem.token = self.token
                 root.children.append(elem)
                 self.token = self.lex.get_token(inset=True)
                 return root
