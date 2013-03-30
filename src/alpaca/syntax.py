@@ -6,6 +6,7 @@ Syntax Pasrse for Regex
 
 from rast import RAST
 from lex import LexParser
+from charset import CharacterSet
 
 class SyntaxParserError(Exception):
     pass
@@ -218,7 +219,15 @@ class SyntaxParser:
             if not root.is_empty():
                 root.children.insert(0, elem)
                 # We got a range, check validity of the range now.
-                if root.children[0].token < root.children[1].token:
+                if root.children[0].token in CharacterSet.mnemnoic:
+                    raise SyntaxParserError(
+                        'Regex Semantics Error: we encount "%s" in range!'
+                        % root.children[0].token)
+                elif root.children[1].token in CharacterSet.mnemnoic:
+                    raise SyntaxParserError(
+                        'Regex Semantics Error: we encount "%s" in range!'
+                        % root.children[1].token)
+                elif CharacterSet.is_valid_range(root.children[0].token, root.children[1].token):
                     return root
                 else:
                     raise SyntaxParserError(

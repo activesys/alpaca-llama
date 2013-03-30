@@ -43,7 +43,9 @@ class Graph:
             self.finish = vcount
 
     def concatenation_graph(self, graph):
-        if len(graph.adjlist) != 0:
+        if len(self.adjlist) == 0:
+            self.new_graph(graph)
+        elif len(graph.adjlist) != 0:
             vcount = len(self.adjlist)
             self.adjlist.extend([[(v+vcount, e) for (v, e) in l] for l in graph.adjlist])
             self.adjlist[self.finish].append((graph.start+vcount, ''))
@@ -60,7 +62,9 @@ class Graph:
             self.adjlist[vcount+1].append((self.finish, ''))
 
     def union_graph(self, graph):
-        if len(graph.adjlist) != 0:
+        if len(self.adjlist) == 0:
+            self.new_graph(graph)
+        elif len(graph.adjlist) != 0:
             vcount = len(self.adjlist)
             self.adjlist.extend([[(v+vcount, e) for (v, e) in l] for l in graph.adjlist])
             self.adjlist[self.start].append((graph.start+vcount, ''))

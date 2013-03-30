@@ -13,6 +13,7 @@ class TestCharacterSet(unittest.TestCase):
         self.assertTrue(CharacterSet.is_valid_range('\\t', '!'))
         self.assertTrue(CharacterSet.is_valid_range('#', '#'))
         self.assertFalse(CharacterSet.is_valid_range('\\', '0'))
+        self.assertRaises(CharacterSetError, CharacterSet.is_valid_range, 'abc', 'ddd')
 
     def test_intersection_set_one(self):
         cset = CharacterSet.intersection_set('a')
@@ -33,7 +34,7 @@ class TestCharacterSet(unittest.TestCase):
              'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y',
              'z', '{', '|', '}', '~'])
     def test_intersection_set_invalid_range(self):
-        self.assertRaises(CharacterSetError, CharacterSet.intersection_set('z', 'a'))
+        self.assertRaises(CharacterSetError, CharacterSet.intersection_set, 'z', 'a')
 
     def test_complementary_set_one(self):
         cset = CharacterSet.complementary_set('a')
@@ -52,7 +53,13 @@ class TestCharacterSet(unittest.TestCase):
     def test_complementary_set_all(self):
         cset = CharacterSet.complementary_set('\\a', '~')
         self.assertEqual(cset, [])
-
+    def test_complementary_set_full(self):
+        cset = CharacterSet.complementary_set_full(CharacterSet.intersection_set('a', 'z') + CharacterSet.intersection_set('X', 'Z') + ['\\t', '\\c', '#', '^'])
+        self.assertEqual(cset,
+            ['\\a', '\\b', '\\n', '\\v', '\\f', '\\r', '!', '"', '$', '%', '&', "'", '(', ')',
+             '*', '+', ',', '-', '.', '/', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', ';', '<', '=',
+             '>', '?', '@', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
+             'R', 'S', 'T', 'U', 'V', 'W', '[', '\\', ']', '_', '`', '{', '|', '}', '~'])
     def test_complementary_set_invalid_range(self):
-        self.assertRaises(CharacterSetError, CharacterSet.intersection_set('4', '\\n'))
+        self.assertRaises(CharacterSetError, CharacterSet.complementary_set, '4', '\\n')
 

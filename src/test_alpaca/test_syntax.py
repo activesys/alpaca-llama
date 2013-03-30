@@ -100,12 +100,12 @@ class TestSyntaxParserError(unittest.TestCase):
         else:
             self.assertTrue(False)
 
-    def test_build_error_range_semantics_equal(self):
-        self.syntax = SyntaxParser('[a-a]')
+    def test_build_error_range_semantics_mnemonic(self):
+        self.syntax = SyntaxParser('[\d-a]')
         try:
             self.syntax.build()
         except SyntaxParserError as err:
-            msg = 'Regex Semantics Error: we encount a invalid range "a-a"!'
+            msg = 'Regex Semantics Error: we encount "\\d" in range!'
             self.assertEqual(err.args[0], msg)
         else:
             self.assertTrue(False)

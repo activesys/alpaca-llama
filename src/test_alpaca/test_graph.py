@@ -146,6 +146,19 @@ class TestGraph(unittest.TestCase):
 
         self.assertEqual(len(self.g.adjlist[3]), 0)
 
+    def test_concatenation_graph_empty(self):
+        graph = Graph()
+        graph.new('a')
+        self.g.concatenation_graph(graph)
+
+        self.assertEqual((self.g.start, self.g.finish), (0, 1))
+        self.assertEqual(len(self.g.adjlist), 2)
+
+        self.assertEqual(len(self.g.adjlist[0]), 1)
+        self.assertIn((1, 'a'), self.g.adjlist[0])
+
+        self.assertEqual(len(self.g.adjlist[1]), 0)
+
     def test_concatenation_graph_union_kleene(self):
         self.g.new('a')
         self.g.union('b')
@@ -352,6 +365,18 @@ class TestGraph(unittest.TestCase):
 
         self.assertEqual(len(self.g.adjlist[7]), 1)
         self.assertIn((1, ''), self.g.adjlist[7])
+
+    def test_union_graph_empty(self):
+        graph = Graph()
+        graph.new('a')
+        self.g.union_graph(graph)
+        self.assertEqual((self.g.start, self.g.finish), (0, 1))
+        self.assertEqual(len(self.g.adjlist), 2)
+
+        self.assertEqual(len(self.g.adjlist[0]), 1)
+        self.assertIn((1, 'a'), self.g.adjlist[0])
+
+        self.assertEqual(len(self.g.adjlist[1]), 0)
 
     def test_union_graph(self):
         graph = Graph()

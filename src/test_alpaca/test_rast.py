@@ -29,7 +29,9 @@ class TestRAST(unittest.TestCase):
         self.rast = SyntaxParser('ab').build()
         self.g = Graph()
         self.g.new('a')
-        self.g.concatenation('b')
+        graph = Graph()
+        graph.new('b')
+        self.g.concatenation_graph(graph)
         g = self.rast.traversal()
         self.assertEqual((g.start, g.finish, g.adjlist), (self.g.start, self.g.finish, self.g.adjlist))
 
@@ -37,7 +39,9 @@ class TestRAST(unittest.TestCase):
         self.rast = SyntaxParser('a|b').build()
         self.g = Graph()
         self.g.new('a')
-        self.g.union('b')
+        graph = Graph()
+        graph.new('b')
+        self.g.union_graph(graph)
         g = self.rast.traversal()
         self.assertEqual((g.start, g.finish, g.adjlist), (self.g.start, self.g.finish, self.g.adjlist))
 
