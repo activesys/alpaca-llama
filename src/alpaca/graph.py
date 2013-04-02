@@ -70,7 +70,7 @@ class Graph:
             self.adjlist[self.start].append((graph.start+vcount, ''))
             self.adjlist[graph.finish+vcount].append((self.finish, ''))
 
-    def kleen_closure(self):
+    def kleene_closure(self):
         if len(self.adjlist) == 0:
             raise InvalidGraphError("Graph is empty.")
 

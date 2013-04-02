@@ -73,7 +73,7 @@ class TestGraph(unittest.TestCase):
         self.assertIn((1, ''), self.g.adjlist[3])
 
     def test_kleene_closure(self):
-        self.assertRaises(InvalidGraphError, self.g.kleen_closure)
+        self.assertRaises(InvalidGraphError, self.g.kleene_closure)
 
         self.g.new('a')
         self.assertEqual((self.g.start, self.g.finish), (0, 1))
@@ -84,7 +84,7 @@ class TestGraph(unittest.TestCase):
 
         self.assertEqual(len(self.g.adjlist[1]), 0)
 
-        self.g.kleen_closure()
+        self.g.kleene_closure()
         self.assertEqual((self.g.start, self.g.finish), (2, 3))
         self.assertEqual(len(self.g.adjlist), 4)
 
@@ -164,7 +164,7 @@ class TestGraph(unittest.TestCase):
         self.g.union('b')
         graph = Graph()
         graph.new('c')
-        graph.kleen_closure()
+        graph.kleene_closure()
         self.g.concatenation_graph(graph)
 
         self.assertEqual((self.g.start, self.g.finish), (0, 7))
@@ -201,7 +201,7 @@ class TestGraph(unittest.TestCase):
         self.g.concatenation('b')
         graph = Graph()
         graph.new('c')
-        graph.kleen_closure()
+        graph.kleene_closure()
         self.g.concatenation_graph(graph)
 
         self.assertEqual((self.g.start, self.g.finish), (0, 6))
@@ -299,7 +299,7 @@ class TestGraph(unittest.TestCase):
         self.g.concatenation('b')
         graph = Graph()
         graph.new('c')
-        graph.kleen_closure()
+        graph.kleene_closure()
         self.g.union_graph(graph)
 
         self.assertEqual((self.g.start, self.g.finish), (0, 2))
@@ -333,7 +333,7 @@ class TestGraph(unittest.TestCase):
         self.g.union('b')
         graph = Graph()
         graph.new('c')
-        graph.kleen_closure()
+        graph.kleene_closure()
         self.g.union_graph(graph)
 
         self.assertEqual((self.g.start, self.g.finish), (0, 1))

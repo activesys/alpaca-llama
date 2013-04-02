@@ -47,13 +47,13 @@ class RAST:
             return graph
         elif self.token == '*':
             graph.new_graph(self.children[0].traversal())
-            graph.kleen_closure()
+            graph.kleene_closure()
             return graph
         elif self.token == '+':
             graph.new_graph(self.children[0].traversal())
             g = Graph()
             g.new_graph(graph)
-            g.kleen_closure()
+            g.kleene_closure()
             graph.concatenation_graph(g)
             return graph
         elif self.token == '[]':
