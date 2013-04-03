@@ -4,8 +4,6 @@ charset.py
 Character Set for Regex
 """
 
-import string
-
 class CharacterSetError(Exception):
     pass
 
