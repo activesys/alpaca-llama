@@ -4,11 +4,15 @@ unittesting for Regex
 """
 
 import unittest
+import copy
 from nfa import NFA
-from regex import Regex
 from graph import Graph
+from regex import Regex
+from regex import RegexError
 
 class TestRegex(unittest.TestCase):
+    def test_init(self):
+        self.assertRaises(RegexError, Regex, '[ab-]')
     def test_transform(self):
         regex = Regex('(ab)+|[x-z]*')
         nfa = regex.transform()
@@ -24,7 +28,7 @@ class TestRegex(unittest.TestCase):
         g5.new('z')
 
         g1.concatenation_graph(g2)
-        g6 = g1
+        g6 = copy.deepcopy(g1)
         g6.kleene_closure()
         g1.concatenation_graph(g6)
         g3.union_graph(g4)
@@ -33,5 +37,7 @@ class TestRegex(unittest.TestCase):
         g1.union_graph(g3)
         tnfa = NFA(g1)
 
-        self.assertEqual(nfa, tnfa)
+        self.assertEqual(
+            (nfa.graph.start, nfa.graph.finish, nfa.graph.adjlist),
+            (tnfa.graph.start, tnfa.graph.finish, tnfa.graph.adjlist))
 
