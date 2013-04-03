@@ -85,3 +85,13 @@ class TestNFA(unittest.TestCase):
             (nfa.graph.start, nfa.graph.finish, nfa.graph.adjlist),
             (g.start, g.finish, g.adjlist))
 
+    def test_move_empyt(self):
+        nfa = Regex('a*|ab').transform()
+        self.assertEqual(nfa._NFA__move([], 'a'), [])
+    def test_move_invalid_edge(self):
+        nfa = Regex('a*|ab').transform()
+        self.assertEqual(nfa._NFA__move([0, 4, 6], 'c'), [])
+    def test_move(self):
+        nfa = Regex('a*|ab').transform()
+        self.assertEqual(nfa._NFA__move([0, 4, 6], 'a'), [1, 5])
+

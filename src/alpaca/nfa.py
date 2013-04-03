@@ -18,3 +18,11 @@ class NFA:
             for nfa in nfas:
                 self.graph.union_graph(nfa.graph)
 
+    def __move(self, vertices, edge):
+        vs = []
+        for vertex in vertices:
+            vs.extend(self.graph.get_peer_vertices(vertex, edge))
+        vs = list(set(vs))
+        vs.sort()
+        return vs
+

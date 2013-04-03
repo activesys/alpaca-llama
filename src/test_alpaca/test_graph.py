@@ -14,7 +14,7 @@ class TestGraph(unittest.TestCase):
 
     def test_new(self):
         self.g.new('a')
-        self.assertEqual((self.g.start, self.g.finish), (0, 1))
+        self.assertEqual((self.g.start, self.g.finish), (0, [1]))
         self.assertEqual(len(self.g.adjlist), 2)
 
         self.assertEqual(len(self.g.adjlist[0]), 1)
@@ -26,7 +26,7 @@ class TestGraph(unittest.TestCase):
 
     def test_concatenation(self):
         self.g.concatenation('a')
-        self.assertEqual((self.g.start, self.g.finish), (0, 1))
+        self.assertEqual((self.g.start, self.g.finish), (0, [1]))
         self.assertEqual(len(self.g.adjlist), 2)
 
         self.assertEqual(len(self.g.adjlist[0]), 1)
@@ -35,7 +35,7 @@ class TestGraph(unittest.TestCase):
         self.assertEqual(len(self.g.adjlist[1]), 0)
 
         self.g.concatenation('b')
-        self.assertEqual((self.g.start, self.g.finish), (0, 2))
+        self.assertEqual((self.g.start, self.g.finish), (0, [2]))
         self.assertEqual(len(self.g.adjlist), 3)
 
         self.assertEqual(len(self.g.adjlist[0]), 1)
@@ -48,7 +48,7 @@ class TestGraph(unittest.TestCase):
 
     def test_union(self):
         self.g.union('a')
-        self.assertEqual((self.g.start, self.g.finish), (0, 1))
+        self.assertEqual((self.g.start, self.g.finish), (0, [1]))
         self.assertEqual(len(self.g.adjlist), 2)
 
         self.assertEqual(len(self.g.adjlist[0]), 1)
@@ -57,7 +57,7 @@ class TestGraph(unittest.TestCase):
         self.assertEqual(len(self.g.adjlist[1]), 0)
 
         self.g.union('b')
-        self.assertEqual((self.g.start, self.g.finish), (0, 1))
+        self.assertEqual((self.g.start, self.g.finish), (0, [1]))
         self.assertEqual(len(self.g.adjlist), 4)
 
         self.assertEqual(len(self.g.adjlist[0]), 2)
@@ -76,7 +76,7 @@ class TestGraph(unittest.TestCase):
         self.assertRaises(InvalidGraphError, self.g.kleene_closure)
 
         self.g.new('a')
-        self.assertEqual((self.g.start, self.g.finish), (0, 1))
+        self.assertEqual((self.g.start, self.g.finish), (0, [1]))
         self.assertEqual(len(self.g.adjlist), 2)
 
         self.assertEqual(len(self.g.adjlist[0]), 1)
@@ -85,7 +85,7 @@ class TestGraph(unittest.TestCase):
         self.assertEqual(len(self.g.adjlist[1]), 0)
 
         self.g.kleene_closure()
-        self.assertEqual((self.g.start, self.g.finish), (2, 3))
+        self.assertEqual((self.g.start, self.g.finish), (2, [3]))
         self.assertEqual(len(self.g.adjlist), 4)
 
         self.assertEqual(len(self.g.adjlist[0]), 1)
@@ -107,7 +107,7 @@ class TestGraph(unittest.TestCase):
         graph.new('a')
         self.g.new_graph(graph)
 
-        self.assertEqual((self.g.start, self.g.finish), (0, 1))
+        self.assertEqual((self.g.start, self.g.finish), (0, [1]))
         self.assertEqual(len(self.g.adjlist), 2)
 
         self.assertEqual(len(self.g.adjlist[0]), 1)
@@ -122,7 +122,7 @@ class TestGraph(unittest.TestCase):
         self.g.new('a')
         self.g.concatenation_graph(graph)
 
-        self.assertEqual((self.g.start, self.g.finish), (0, 1))
+        self.assertEqual((self.g.start, self.g.finish), (0, [1]))
         self.assertEqual(len(self.g.adjlist), 2)
 
         self.assertEqual(len(self.g.adjlist[0]), 1)
@@ -132,7 +132,7 @@ class TestGraph(unittest.TestCase):
 
         graph.new('b')
         self.g.concatenation_graph(graph)
-        self.assertEqual((self.g.start, self.g.finish), (0, 3))
+        self.assertEqual((self.g.start, self.g.finish), (0, [3]))
         self.assertEqual(len(self.g.adjlist), 4)
 
         self.assertEqual(len(self.g.adjlist[0]), 1)
@@ -151,7 +151,7 @@ class TestGraph(unittest.TestCase):
         graph.new('a')
         self.g.concatenation_graph(graph)
 
-        self.assertEqual((self.g.start, self.g.finish), (0, 1))
+        self.assertEqual((self.g.start, self.g.finish), (0, [1]))
         self.assertEqual(len(self.g.adjlist), 2)
 
         self.assertEqual(len(self.g.adjlist[0]), 1)
@@ -167,7 +167,7 @@ class TestGraph(unittest.TestCase):
         graph.kleene_closure()
         self.g.concatenation_graph(graph)
 
-        self.assertEqual((self.g.start, self.g.finish), (0, 7))
+        self.assertEqual((self.g.start, self.g.finish), (0, [7]))
         self.assertEqual(len(self.g.adjlist), 8)
 
         self.assertEqual(len(self.g.adjlist[0]), 2)
@@ -204,7 +204,7 @@ class TestGraph(unittest.TestCase):
         graph.kleene_closure()
         self.g.concatenation_graph(graph)
 
-        self.assertEqual((self.g.start, self.g.finish), (0, 6))
+        self.assertEqual((self.g.start, self.g.finish), (0, [6]))
         self.assertEqual(len(self.g.adjlist), 7)
 
         self.assertEqual(len(self.g.adjlist[0]), 1)
@@ -237,7 +237,7 @@ class TestGraph(unittest.TestCase):
         graph.union('d')
         self.g.concatenation_graph(graph)
 
-        self.assertEqual((self.g.start, self.g.finish), (0, 4))
+        self.assertEqual((self.g.start, self.g.finish), (0, [4]))
         self.assertEqual(len(self.g.adjlist), 7)
 
         self.assertEqual(len(self.g.adjlist[0]), 1)
@@ -269,7 +269,7 @@ class TestGraph(unittest.TestCase):
         graph.concatenation('d')
         self.g.union_graph(graph)
 
-        self.assertEqual((self.g.start, self.g.finish), (0, 1))
+        self.assertEqual((self.g.start, self.g.finish), (0, [1]))
         self.assertEqual(len(self.g.adjlist), 7)
 
         self.assertEqual(len(self.g.adjlist[0]), 3)
@@ -302,7 +302,7 @@ class TestGraph(unittest.TestCase):
         graph.kleene_closure()
         self.g.union_graph(graph)
 
-        self.assertEqual((self.g.start, self.g.finish), (0, 2))
+        self.assertEqual((self.g.start, self.g.finish), (0, [2]))
         self.assertEqual(len(self.g.adjlist), 7)
 
         self.assertEqual(len(self.g.adjlist[0]), 2)
@@ -336,7 +336,7 @@ class TestGraph(unittest.TestCase):
         graph.kleene_closure()
         self.g.union_graph(graph)
 
-        self.assertEqual((self.g.start, self.g.finish), (0, 1))
+        self.assertEqual((self.g.start, self.g.finish), (0, [1]))
         self.assertEqual(len(self.g.adjlist), 8)
 
         self.assertEqual(len(self.g.adjlist[0]), 3)
@@ -370,7 +370,7 @@ class TestGraph(unittest.TestCase):
         graph = Graph()
         graph.new('a')
         self.g.union_graph(graph)
-        self.assertEqual((self.g.start, self.g.finish), (0, 1))
+        self.assertEqual((self.g.start, self.g.finish), (0, [1]))
         self.assertEqual(len(self.g.adjlist), 2)
 
         self.assertEqual(len(self.g.adjlist[0]), 1)
@@ -382,7 +382,7 @@ class TestGraph(unittest.TestCase):
         graph = Graph()
         self.g.union('a')
         self.g.union_graph(graph)
-        self.assertEqual((self.g.start, self.g.finish), (0, 1))
+        self.assertEqual((self.g.start, self.g.finish), (0, [1]))
         self.assertEqual(len(self.g.adjlist), 2)
 
         self.assertEqual(len(self.g.adjlist[0]), 1)
@@ -392,7 +392,7 @@ class TestGraph(unittest.TestCase):
 
         graph.new('b')
         self.g.union_graph(graph)
-        self.assertEqual((self.g.start, self.g.finish), (0, 1))
+        self.assertEqual((self.g.start, self.g.finish), (0, [1]))
         self.assertEqual(len(self.g.adjlist), 4)
 
         self.assertEqual(len(self.g.adjlist[0]), 2)
@@ -406,4 +406,25 @@ class TestGraph(unittest.TestCase):
 
         self.assertEqual(len(self.g.adjlist[3]), 1)
         self.assertIn((1, ''), self.g.adjlist[3])
+
+    def test_get_peer_vertices_invalid_vertiex(self):
+        self.g.new('a')
+        self.g.kleene_closure()
+        self.g.union('b')
+        self.assertRaises(InvalidGraphError, self.g.get_peer_vertices, 9, 'a')
+    def test_get_peer_vertices_invalid_edge(self):
+        self.g.new('a')
+        self.g.kleene_closure()
+        self.g.union('b')
+        self.assertEqual(self.g.get_peer_vertices(2, 'c'), [])
+    def test_get_peer_vertices_a(self):
+        self.g.new('a')
+        self.g.kleene_closure()
+        self.g.union('b')
+        self.assertEqual(self.g.get_peer_vertices(0, 'a'), [1])
+    def test_get_peer_vertices_epsilon(self):
+        self.g.new('a')
+        self.g.kleene_closure()
+        self.g.union('b')
+        self.assertEqual(self.g.get_peer_vertices(2, ''), [0, 3, 4])
 
