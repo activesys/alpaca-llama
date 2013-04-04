@@ -97,7 +97,5 @@ class Graph:
         if vertex >= len(self.adjlist):
             raise InvalidGraphError("Invalid vertex.")
 
-        vertices = [v for v, e in self.adjlist[vertex] if e == edge]
-        vertices.sort()
-        return vertices
+        return {v for v, e in self.adjlist[vertex] if e == edge}
 

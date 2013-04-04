@@ -416,15 +416,15 @@ class TestGraph(unittest.TestCase):
         self.g.new('a')
         self.g.kleene_closure()
         self.g.union('b')
-        self.assertEqual(self.g.get_peer_vertices(2, 'c'), [])
+        self.assertEqual(self.g.get_peer_vertices(2, 'c'), set())
     def test_get_peer_vertices_a(self):
         self.g.new('a')
         self.g.kleene_closure()
         self.g.union('b')
-        self.assertEqual(self.g.get_peer_vertices(0, 'a'), [1])
+        self.assertEqual(self.g.get_peer_vertices(0, 'a'), {1})
     def test_get_peer_vertices_epsilon(self):
         self.g.new('a')
         self.g.kleene_closure()
         self.g.union('b')
-        self.assertEqual(self.g.get_peer_vertices(2, ''), [0, 3, 4])
+        self.assertEqual(self.g.get_peer_vertices(2, ''), {0, 3, 4})
 

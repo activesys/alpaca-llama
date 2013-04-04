@@ -19,10 +19,20 @@ class NFA:
                 self.graph.union_graph(nfa.graph)
 
     def __move(self, vertices, edge):
-        vs = []
+        new_vertices = set()
         for vertex in vertices:
-            vs.extend(self.graph.get_peer_vertices(vertex, edge))
-        vs = list(set(vs))
-        vs.sort()
-        return vs
+            new_vertices.update(self.graph.get_peer_vertices(vertex, edge))
+        return new_vertices
+
+    def __epsilon_closure(self, vertices):
+        eset = set()
+        while True:
+            tmp_set = set()
+            for vertex in vertices.difference(eset):
+                tmp_set.update(self.graph.get_peer_vertices(vertex, ''))
+            eset.update(vertices)
+            vertices = tmp_set
+            if len(vertices) == 0:
+                break
+        return eset
 

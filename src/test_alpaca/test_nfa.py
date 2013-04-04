@@ -87,11 +87,27 @@ class TestNFA(unittest.TestCase):
 
     def test_move_empyt(self):
         nfa = Regex('a*|ab').transform()
-        self.assertEqual(nfa._NFA__move([], 'a'), [])
+        self.assertEqual(nfa._NFA__move(set(), 'a'), set())
     def test_move_invalid_edge(self):
         nfa = Regex('a*|ab').transform()
-        self.assertEqual(nfa._NFA__move([0, 4, 6], 'c'), [])
+        self.assertEqual(nfa._NFA__move({0, 4, 6}, 'c'), set())
     def test_move(self):
         nfa = Regex('a*|ab').transform()
-        self.assertEqual(nfa._NFA__move([0, 4, 6], 'a'), [1, 5])
+        self.assertEqual(nfa._NFA__move({0, 4, 6}, 'a'), {1, 5})
+
+    def test_epsilon_closure_no_epsilon(self):
+        nfa = Regex('abc').transform()
+        self.assertEqual(nfa._NFA__epsilon_closure({0}), {0})
+    def test_epsilon_closure_union(self):
+        nfa = Regex('a|b|c').transform()
+        self.assertEqual(nfa._NFA__epsilon_closure({0}), {0, 2, 4})
+    def test_epsilon_closure(self):
+        g1 = Graph()
+        g1.new('a')
+        g2 = Graph()
+        g2.new('b')
+        g2.union('c')
+        g1.union_graph(g2)
+        nfa = NFA(g1)
+        self.assertEqual(nfa._NFA__epsilon_closure({0}), {0, 2, 4})
 
