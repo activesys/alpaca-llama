@@ -18,6 +18,7 @@ from test_rast import TestRAST
 from test_charset import TestCharacterSet
 from test_nfa import TestNFA
 from test_regex import TestRegex
+from test_setrelation import TestSetRelation
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
