@@ -4,10 +4,14 @@ Implementation of NFA
 """
 
 from graph import Graph
+from charset import CharacterSet
+from setrelation import SetRelation
+from dfa import DFA
 
 class NFA:
     def __init__(self, graph=None):
         self.graph = graph
+
 
     def merge(self, nfas):
         if len(nfas) == 0:
@@ -18,11 +22,32 @@ class NFA:
             for nfa in nfas:
                 self.graph.union_graph(nfa.graph)
 
+
+    def transform(self):
+        eset = self.__epsilon_closure({self.graph.start})
+        relation = SetRelation(eset)
+        while not relation.is_all_marked():
+            unmarked_set = relation.get_non_marked()
+            relation.mark(unmarked_set)
+            for c in CharacterSet.set:
+                cset = self.__move(unmarked_set, c)
+                eset = self.__epsilon_closure(cset)
+                if len(eset) > 0:
+                    relation.add_relation(unmarked_set, eset, c)
+        relation.set_finish(self.graph.finish)
+
+        rs = relation.get_relations()
+        graph = Graph()
+        graph.new_relations(rs, relation.start, relation.finish)
+        return DFA(graph)
+
+
     def __move(self, vertices, edge):
         new_vertices = set()
         for vertex in vertices:
             new_vertices.update(self.graph.get_peer_vertices(vertex, edge))
         return new_vertices
+
 
     def __epsilon_closure(self, vertices):
         eset = set()
@@ -35,4 +60,5 @@ class NFA:
             if len(vertices) == 0:
                 break
         return eset
+
 
