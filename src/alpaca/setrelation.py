@@ -90,3 +90,7 @@ class SetRelation:
                 return self.adjlist.index(relation)
         raise SetRelationError('invalid set!')
 
+
+    def get_relations(self):
+        return [[(v, e) for e, v in l[2].items()] for l in self.adjlist]
+

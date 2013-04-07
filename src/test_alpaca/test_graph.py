@@ -7,6 +7,7 @@ unittesting for graph.
 import unittest
 from graph import Graph
 from graph import InvalidGraphError
+from setrelation import SetRelation
 
 class TestGraph(unittest.TestCase):
     def setUp(self):
@@ -427,4 +428,61 @@ class TestGraph(unittest.TestCase):
         self.g.kleene_closure()
         self.g.union('b')
         self.assertEqual(self.g.get_peer_vertices(2, ''), {0, 3, 4})
+
+    def test_new_relations(self):
+        self.relation = SetRelation({1, 2, 3})
+        self.relation.add_relation({1, 2, 3}, {4, 5}, 'a')
+        self.relation.add_relation({1, 2, 3}, {7, 8, 9}, 'b')
+        self.relation.add_relation({1, 2, 3}, {6}, 'c')
+        self.relation.add_relation({4, 5}, {4, 5}, 'a')
+        self.relation.add_relation({4, 5}, {7, 8, 9}, 'b')
+        self.relation.add_relation({7, 8, 9}, {1, 2, 3}, 'e')
+        self.relation.add_relation({7, 8, 9}, {6}, 'f')
+        self.relation.set_finish([4, 6])
+        self.g.new_relations(self.relation.get_relations(), self.relation.start, self.relation.finish)
+
+        self.assertEqual((self.g.start, self.g.finish), (0, [1, 3]))
+        self.assertEqual(len(self.g.adjlist), 4)
+
+        self.assertEqual(len(self.g.adjlist[0]), 3)
+        self.assertIn((1, 'a'), self.g.adjlist[0])
+        self.assertIn((2, 'b'), self.g.adjlist[0])
+        self.assertIn((3, 'c'), self.g.adjlist[0])
+
+        self.assertEqual(len(self.g.adjlist[1]), 2)
+        self.assertIn((1, 'a'), self.g.adjlist[1])
+        self.assertIn((2, 'b'), self.g.adjlist[1])
+
+        self.assertEqual(len(self.g.adjlist[2]), 2)
+        self.assertIn((0, 'e'), self.g.adjlist[2])
+        self.assertIn((3, 'f'), self.g.adjlist[2])
+
+        self.assertEqual(len(self.g.adjlist[3]), 0)
+
+    def test_new_relations_error_start(self):
+        self.relation = SetRelation({1, 2, 3})
+        self.relation.add_relation({1, 2, 3}, {4, 5}, 'a')
+        self.relation.add_relation({1, 2, 3}, {7, 8, 9}, 'b')
+        self.relation.add_relation({1, 2, 3}, {6}, 'c')
+        self.relation.add_relation({4, 5}, {4, 5}, 'a')
+        self.relation.add_relation({4, 5}, {7, 8, 9}, 'b')
+        self.relation.add_relation({7, 8, 9}, {1, 2, 3}, 'e')
+        self.relation.add_relation({7, 8, 9}, {6}, 'f')
+        self.relation.set_finish([4, 6])
+        self.assertRaises(
+            InvalidGraphError, self.g.new_relations,
+            self.relation.get_relations(), 2, self.relation.finish)
+    def test_new_relations_error_finish(self):
+        self.relation = SetRelation({1, 2, 3})
+        self.relation.add_relation({1, 2, 3}, {4, 5}, 'a')
+        self.relation.add_relation({1, 2, 3}, {7, 8, 9}, 'b')
+        self.relation.add_relation({1, 2, 3}, {6}, 'c')
+        self.relation.add_relation({4, 5}, {4, 5}, 'a')
+        self.relation.add_relation({4, 5}, {7, 8, 9}, 'b')
+        self.relation.add_relation({7, 8, 9}, {1, 2, 3}, 'e')
+        self.relation.add_relation({7, 8, 9}, {6}, 'f')
+        self.relation.set_finish([4, 6])
+        self.assertRaises(
+            InvalidGraphError, self.g.new_relations,
+            self.relation.get_relations(), self.relation.start, [])
 

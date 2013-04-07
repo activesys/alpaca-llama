@@ -111,4 +111,21 @@ class TestSetRelation(unittest.TestCase):
         self.relation.add_relation({7, 8, 9}, {6}, 'f')
         self.assertRaises(SetRelationError, self.relation.set_finish, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 
+    def test_get_relations(self):
+        self.relation = SetRelation({1, 2, 3})
+        self.relation.add_relation({1, 2, 3}, {4, 5}, 'a')
+        self.relation.add_relation({1, 2, 3}, {7, 8, 9}, 'b')
+        self.relation.add_relation({1, 2, 3}, {6}, 'c')
+        self.relation.add_relation({4, 5}, {4, 5}, 'a')
+        self.relation.add_relation({4, 5}, {7, 8, 9}, 'b')
+        self.relation.add_relation({7, 8, 9}, {1, 2, 3}, 'e')
+        self.relation.add_relation({7, 8, 9}, {6}, 'f')
+        L = [[(1, 'a'), (2, 'b'), (3, 'c')], [(1, 'a'), (2, 'b')], [(0, 'e'), (3, 'f')], []]
+        for l in L:
+            l.sort()
+        relations = self.relation.get_relations()
+        for l in relations:
+            l.sort()
+        self.assertEqual(relations, L)
+
 

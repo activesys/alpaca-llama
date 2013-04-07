@@ -45,6 +45,14 @@ class Graph:
             self.finish = copy.deepcopy(graph.finish)
             self.adjlist = copy.deepcopy(graph.adjlist)
 
+    def new_relations(self, relations, start, finish):
+        if start != 0 or len(finish) == 0:
+            raise InvalidGraphError("Invalid start or finish.")
+
+        self.start = start
+        self.finish = copy.deepcopy(finish)
+        self.adjlist = copy.deepcopy(relations)
+
     def concatenation(self, edge):
         if len(self.adjlist) == 0:
             self.new(edge)
