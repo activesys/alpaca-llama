@@ -8,7 +8,7 @@ class CharacterSetError(Exception):
     pass
 
 class CharacterSet:
-    set = [
+    cset = [
         '\\a', '\\b', '\\t', '\\n', '\\v', '\\f', '\\r', '\\c', '!', '"', '#', '$', '%', '&', "'", '(', ')', '*',
         '+', ',', '-', '.', '/', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', ';', '<', '=', '>', '?',
         '@', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
@@ -56,14 +56,14 @@ class CharacterSet:
     }
 
     def is_valid_range(begin, end):
-        if begin not in CharacterSet.set or end not in CharacterSet.set:
+        if begin not in CharacterSet.cset or end not in CharacterSet.cset:
             raise CharacterSetError
 
-        pos_begin, pos_end = CharacterSet.set.index(begin), CharacterSet.set.index(end)
+        pos_begin, pos_end = CharacterSet.cset.index(begin), CharacterSet.cset.index(end)
         return pos_begin <= pos_end
 
     def intersection_set(begin, end=None):
-        if begin not in CharacterSet.set or end != None and end not in CharacterSet.set:
+        if begin not in CharacterSet.cset or end != None and end not in CharacterSet.cset:
             raise CharacterSetError
 
         if end != None and not CharacterSet.is_valid_range(begin, end):
@@ -72,26 +72,26 @@ class CharacterSet:
         if end == None:
             return [begin]
         else:
-            return CharacterSet.set[CharacterSet.set.index(begin) : CharacterSet.set.index(end)+1]
+            return CharacterSet.cset[CharacterSet.cset.index(begin) : CharacterSet.cset.index(end)+1]
 
     def complementary_set(begin, end=None):
-        if begin not in CharacterSet.set or end != None and end not in CharacterSet.set:
+        if begin not in CharacterSet.cset or end != None and end not in CharacterSet.cset:
             raise CharacterSetError
 
         if end != None and not CharacterSet.is_valid_range(begin, end):
             raise CharacterSetError
 
         if end == None:
-            cset = CharacterSet.set[:]
+            cset = CharacterSet.cset[:]
             cset.remove(begin)
             return cset
         else:
-            cset = CharacterSet.set[:]
-            del cset[CharacterSet.set.index(begin) : CharacterSet.set.index(end)+1]
+            cset = CharacterSet.cset[:]
+            del cset[CharacterSet.cset.index(begin) : CharacterSet.cset.index(end)+1]
             return cset
 
     def complementary_set_full(clist):
-        cset = CharacterSet.set[:]
+        cset = CharacterSet.cset[:]
         for char in clist:
             cset.remove(char)
         return cset

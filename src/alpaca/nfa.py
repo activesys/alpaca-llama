@@ -29,7 +29,7 @@ class NFA:
         while not relation.is_all_marked():
             unmarked_set = relation.get_non_marked()
             relation.mark(unmarked_set)
-            for c in CharacterSet.set:
+            for c in CharacterSet.cset:
                 cset = self.__move(unmarked_set, c)
                 eset = self.__epsilon_closure(cset)
                 if len(eset) > 0:
