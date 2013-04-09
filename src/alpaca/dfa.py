@@ -11,35 +11,58 @@ class DFA:
     def __init__(self, graph=None):
         self.graph = graph
 
+
     def minimize(self):
         finish_set = set(self.graph.finish)
         nonfinish_set = {s for s in range(len(self.graph.adjlist))}
         nonfinish_set.difference_update(finish_set)
-        old_sets = {nonfinish_set, finish_set}
+        old_sets = [nonfinish_set, finish_set]
 
         relation = None
         for c in CharacterSet.cset:
+            for aset in old_sets:
+                if len(aset) > 1:
+                    break
+            else:
+                break
             new_sets = self.__split(old_sets, c)
             old_sets = new_sets
 
-        # new relation from split and graph
-        relation = SetRelation()
-        # some code.
+        relation = None
+        for aset in old_sets:
+            if self.graph.start in aset:
+                relation = SetRelation(aset)
+                break
+        # depth-first search
+        for aset in old_sets:
+            rl = self.graph.adjlist[list(aset)[0]]
+            for v, e in rl:
+                if v in aset:
+                    relation.add_relation(aset, aset, e)
+                else:
+                    relation.add_relation(aset, {v}, e)
+        relation.set_finish(self.graph.finish)
+
         graph = Graph()
         graph.new_relations(relation.get_relations(), relation.start, relation.finish)
         self.graph = graph
 
+
     def __split(self, old_sets, c):
-        relation_dict = {}
-        new_sets = set()
+        if len(old_sets) <= 1:
+            return old_sets
+
+        new_sets = []
         for aset in old_sets:
+            relation_dict = {}
             for src_state in aset:
-                dst_state = self.graph.get_vertex(src_state, c)
-                if dst_state in relation_dict:
-                    relation_dict[{dst_state}].add(src_state)
+                dst_set = self.graph.get_peer_vertices(src_state, c)
+                if frozenset(dst_set) in relation_dict:
+                    relation_dict[frozenset(dst_set)].add(src_state)
                 else:
-                    relation_dict[{dst_state}] = {src_state}
-            new_sets.update(relation_dict.values())
+                    relation_dict[frozenset(dst_set)] = {src_state}
+            new_sets.extend(relation_dict.values())
 
         return new_sets
+
 
