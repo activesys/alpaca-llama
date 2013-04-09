@@ -28,24 +28,30 @@ class DFA:
             new_sets = self.__split(old_sets, c)
             old_sets = new_sets
 
-        relation = None
         for aset in old_sets:
-            if self.graph.start in aset:
-                relation = SetRelation(aset)
-                break
-        # depth-first search
-        for aset in old_sets:
-            rl = self.graph.adjlist[list(aset)[0]]
-            for v, e in rl:
-                if v in aset:
-                    relation.add_relation(aset, aset, e)
-                else:
-                    relation.add_relation(aset, {v}, e)
-        relation.set_finish(self.graph.finish)
+            self.graph.unique(aset)
 
-        graph = Graph()
-        graph.new_relations(relation.get_relations(), relation.start, relation.finish)
-        self.graph = graph
+        #relation = None
+        #start_set = None
+        #for aset in old_sets:
+            #if self.graph.start in aset:
+                #relation = SetRelation(aset)
+                #start_set = aset
+                #break
+
+        ## depth-first search
+        #for aset in old_sets:
+            #rl = self.graph.adjlist[list(aset)[0]]
+            #for v, e in rl:
+                #if v in aset:
+                    #relation.add_relation(aset, aset, e)
+                #else:
+                    #relation.add_relation(aset, {v}, e)
+        #relation.set_finish(self.graph.finish)
+
+        #graph = Graph()
+        #graph.new_relations(relation.get_relations(), relation.start, relation.finish)
+        #self.graph = graph
 
 
     def __split(self, old_sets, c):

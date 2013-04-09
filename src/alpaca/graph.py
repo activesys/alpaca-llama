@@ -107,3 +107,25 @@ class Graph:
 
         return {v for v, e in self.adjlist[vertex] if e == edge}
 
+    def unique(self, vset):
+        if len(vset) > 1:
+            base_v = None
+            if self.start in vset:
+                base_v = self.start
+            else:
+                l = list(vset)
+                l.sort()
+                base_v = l[0]
+
+            for vertex in range(len(self.adjlist)):
+                if vertex != base_v and vertex in vset:
+                    self.adjlist[vertex][:] = []
+                    self.adjlist[vertex].append((None, None))
+                    if vertex in self.finish:
+                        self.finish.remove(vertex)
+                else:
+                    for v, e in self.adjlist[vertex]:
+                        if v in vset:
+                            index = self.adjlist[vertex].index((v, e))
+                            self.adjlist[vertex][index] = (base_v, e)
+
