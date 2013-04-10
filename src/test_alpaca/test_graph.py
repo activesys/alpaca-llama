@@ -551,4 +551,20 @@ class TestGraph(unittest.TestCase):
         self.assertIn((None, None), self.g.adjlist[4])
         self.assertEqual(len(self.g.adjlist[5]), 0)
 
+    def test_inter(self):
+        self.g.adjlist.extend(
+            [[(1,'a'),(0,'b'),(3,'d')],[(1,'a'),(3,'c')],[(None, None)],
+             [(3,'c'),(3,'d'),(5,'e')],[(None, None)],[]])
+        self.g.start = 0
+        self.g.finish = [3, 5]
+        i = iter(self.g)
+        self.assertEqual(next(i), (0, 1, 'a'))
+        self.assertEqual(next(i), (0, 0, 'b'))
+        self.assertEqual(next(i), (0, 3, 'd'))
+        self.assertEqual(next(i), (1, 1, 'a'))
+        self.assertEqual(next(i), (1, 3, 'c'))
+        self.assertEqual(next(i), (3, 3, 'c'))
+        self.assertEqual(next(i), (3, 3, 'd'))
+        self.assertEqual(next(i), (3, 5, 'e'))
+        self.assertRaises(StopIteration, next, i)
 

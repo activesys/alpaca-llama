@@ -20,6 +20,7 @@ from test_nfa import TestNFA
 from test_regex import TestRegex
 from test_setrelation import TestSetRelation
 from test_dfa import TestDFA
+from test_dot import TestDot
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

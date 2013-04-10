@@ -27,6 +27,12 @@ class Graph:
         self.start = -1
         self.finish = []
 
+    def __iter__(self):
+        for i in range(len(self.adjlist)):
+            for v, e in self.adjlist[i]:
+                if v != None:
+                    yield i, v, e
+
     def new(self, edge):
         if len(self.adjlist) != 0:
             raise InvalidGraphError("Graph is non-empty.")
