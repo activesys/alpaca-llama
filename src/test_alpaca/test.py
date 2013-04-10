@@ -21,6 +21,10 @@ from test_regex import TestRegex
 from test_setrelation import TestSetRelation
 from test_dfa import TestDFA
 from test_dot import TestDot
+from test_alpaca import TestAlpaca
+from test_options import TestOptions
+from test_input import TestInput
+from test_output import TestOutput
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

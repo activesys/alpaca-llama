@@ -20,5 +20,8 @@ class Dot:
         self.script = self.script + '}'
 
     def new_edge(self, vb, ve, e):
-        self.script = self.script + '    S%d -> S%d [label = "%s"];\n' % (vb, ve, e)
+        if e in ('"', '\\'):
+            self.script = self.script + '    S%d -> S%d [label = "\\%s"];\n' % (vb, ve, e)
+        else:
+            self.script = self.script + '    S%d -> S%d [label = "%s"];\n' % (vb, ve, e)
 

@@ -34,7 +34,8 @@ class StateTransitionTable:
                 '%': self.STATE_FINISH, '&': self.STATE_FINISH, "'": self.STATE_FINISH, ',': self.STATE_FINISH,
                 '/': self.STATE_FINISH, ':': self.STATE_FINISH, ';': self.STATE_FINISH, '<': self.STATE_FINISH,
                 '=': self.STATE_FINISH, '>': self.STATE_FINISH, '?': self.STATE_FINISH, '@': self.STATE_FINISH,
-                '_': self.STATE_FINISH, '{': self.STATE_FINISH, '}': self.STATE_FINISH, '~': self.STATE_FINISH
+                '`': self.STATE_FINISH, '_': self.STATE_FINISH, '{': self.STATE_FINISH, '}': self.STATE_FINISH,
+                '~': self.STATE_FINISH
             },
             self.STATE_IN_ESCAPE: {
                 '|': self.STATE_FINISH, '*': self.STATE_FINISH, '+': self.STATE_FINISH, '(': self.STATE_FINISH,
