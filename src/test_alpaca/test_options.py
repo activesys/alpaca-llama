@@ -5,6 +5,7 @@ unittesting for Options
 
 import unittest
 from options import Options
+from options import OptionsError
 
 class TestOptions(unittest.TestCase):
     def test_get_input(self):
@@ -21,4 +22,20 @@ class TestOptions(unittest.TestCase):
         self.assertEqual(Options.get_output(), 'output2.gv')
         Options.parse(['--output', 'output3.gv'])
         self.assertEqual(Options.get_output(), 'output3.gv')
+    def test_is_show_version(self):
+        Options.parse([])
+        self.assertFalse(Options.is_show_version())
+        Options.parse(['-V'])
+        self.assertTrue(Options.is_show_version())
+        Options.parse(['--version'])
+        self.assertTrue(Options.is_show_version())
+    def test_is_show_help(self):
+        Options.parse([])
+        self.assertFalse(Options.is_show_help())
+        Options.parse(['-h'])
+        self.assertTrue(Options.is_show_help())
+        Options.parse(['--help'])
+        self.assertTrue(Options.is_show_help())
+    def test_parse_error(self):
+        self.assertRaises(OptionsError, Options.parse, ['-X'])
 
