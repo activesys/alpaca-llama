@@ -184,4 +184,29 @@ class TestNFA(unittest.TestCase):
         self.assertEqual(len(dfa.graph.adjlist[4]), 2)
         self.assertIn((1, 'a'), dfa.graph.adjlist[4])
         self.assertIn((2, 'b'), dfa.graph.adjlist[4])
+    def test_transform_multiend(self):
+        g = Graph()
+        g.start = 0
+        g.finish = [1]
+        g.adjlist.extend([
+                [(1, '\\\\'), (2, ''), (4, '')],
+                [],
+                [(3, '!')],
+                [(1, '')],
+                [(5, '\\\\')],
+                [(6, '')],
+                [(7, '\\\\')],
+                [(1, '')]
+            ])
+        nfa = NFA(g)
+        dfa = nfa.transform()
+        self.assertEqual((dfa.graph.start, dfa.graph.finish), (0, [1, 2, 3]))
+        self.assertEqual(len(dfa.graph.adjlist), 4)
+        self.assertEqual(len(dfa.graph.adjlist[0]), 2)
+        self.assertIn((2, '\\\\'), dfa.graph.adjlist[0])
+        self.assertIn((1, '!'), dfa.graph.adjlist[0])
+        self.assertEqual(len(dfa.graph.adjlist[1]), 0)
+        self.assertEqual(len(dfa.graph.adjlist[2]), 1)
+        self.assertIn((3, '\\\\'), dfa.graph.adjlist[2])
+        self.assertEqual(len(dfa.graph.adjlist[3]), 0)
 

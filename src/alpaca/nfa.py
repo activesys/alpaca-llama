@@ -34,6 +34,11 @@ class NFA:
                 eset = self.__epsilon_closure(cset)
                 if len(eset) > 0:
                     relation.add_relation(unmarked_set, eset, c)
+            for c in CharacterSet.operator:
+                cset = self.__move(unmarked_set, c)
+                eset = self.__epsilon_closure(cset)
+                if len(eset) > 0:
+                    relation.add_relation(unmarked_set, eset, c)
         relation.set_finish(self.graph.finish)
 
         rs = relation.get_relations()

@@ -2,6 +2,7 @@
 dot.py
 Dot for dot script
 """
+from charset import CharacterSet
 
 class Dot:
     def __init__(self):
@@ -20,7 +21,7 @@ class Dot:
         self.script = self.script + '}'
 
     def new_edge(self, vb, ve, e):
-        if e in ('"', '\\'):
+        if e in ('"', '\\') or e in CharacterSet.abbreviation:
             self.script = self.script + '    S%d -> S%d [label = "\\%s"];\n' % (vb, ve, e)
         else:
             self.script = self.script + '    S%d -> S%d [label = "%s"];\n' % (vb, ve, e)

@@ -12,8 +12,8 @@ class TestDot(unittest.TestCase):
         dot = Dot()
         graph = Graph()
         graph.adjlist.extend(
-            [[(1,'a'),(0,'b'),(3,'d')],[(1,'a'),(3,'c')],[(None, None)],
-             [(3,'c'),(3,'d'),(5,'e')],[(None, None)],[]])
+            [[(1,'a'),(0,'b'),(3,'\\d')],[(1,'a'),(3,'c')],[(None, None)],
+             [(3,'c'),(3,'\\d'),(5,'"')],[(None, None)],[]])
         graph.start = 0
         graph.finish = [3, 5]
         dot.start(graph.start, graph.finish)
@@ -30,11 +30,11 @@ class TestDot(unittest.TestCase):
             '    S5 [shape = doublecircle];\n' +
             '    S0 -> S1 [label = "a"];\n' +
             '    S0 -> S0 [label = "b"];\n' +
-            '    S0 -> S3 [label = "d"];\n' +
+            '    S0 -> S3 [label = "\\d"];\n' +
             '    S1 -> S1 [label = "a"];\n' +
             '    S1 -> S3 [label = "c"];\n' +
             '    S3 -> S3 [label = "c"];\n' +
-            '    S3 -> S3 [label = "d"];\n' +
-            '    S3 -> S5 [label = "e"];\n' +
+            '    S3 -> S3 [label = "\\d"];\n' +
+            '    S3 -> S5 [label = "\\""];\n' +
             '}')
 

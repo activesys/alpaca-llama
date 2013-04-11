@@ -190,7 +190,7 @@ class TestLexParser(unittest.TestCase):
         self.assertEqual(self.lex.get_token(inset=True, firstchar=True), (True, 'EOR'))
 
     def test_get_token_all(self):
-        self.lex = LexParser('(\\l%=\\f)|\\**\\')
+        self.lex = LexParser('(\\l%=\\f)|\\**\\\\\\')
         self.assertEqual(self.lex.get_token(), (True, '('))
         self.assertEqual(self.lex.get_token(), (False, '\\l'))
         self.assertEqual(self.lex.get_token(), (False, '%'))
@@ -200,6 +200,7 @@ class TestLexParser(unittest.TestCase):
         self.assertEqual(self.lex.get_token(), (True, '|'))
         self.assertEqual(self.lex.get_token(), (False, '\\*'))
         self.assertEqual(self.lex.get_token(), (True, '*'))
+        self.assertEqual(self.lex.get_token(), (False, '\\\\'))
         self.assertEqual(self.lex.get_token(), (True, '\\'))
         self.assertEqual(self.lex.get_token(), (True, 'EOR'))
 

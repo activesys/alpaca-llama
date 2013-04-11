@@ -3,13 +3,13 @@ digraph G {
     node [shape = circle];
     start [shape = plaintext, label = ""];
     start -> S0 [label = "start"];
-    S3 [shape = doublecircle];
+    S4 [shape = doublecircle];
     S0 -> S0 [label = "b"];
     S0 -> S1 [label = "a"];
+    S1 -> S3 [label = "b"];
     S1 -> S1 [label = "a"];
-    S1 -> S2 [label = "b"];
-    S2 -> S1 [label = "a"];
-    S2 -> S3 [label = "b"];
+    S3 -> S4 [label = "b"];
     S3 -> S1 [label = "a"];
-    S3 -> S0 [label = "b"];
+    S4 -> S0 [label = "b"];
+    S4 -> S1 [label = "a"];
 }

@@ -28,6 +28,14 @@ class DFA:
                 break
             new_sets = self.__split(old_sets, c)
             old_sets = new_sets
+        for c in CharacterSet.operator:
+            for aset in old_sets:
+                if len(aset) > 1:
+                    break
+            else:
+                break
+            new_sets = self.__split(old_sets, c)
+            old_sets = new_sets
 
         for aset in old_sets:
             self.graph.unique(aset)

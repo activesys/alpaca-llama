@@ -34,7 +34,11 @@ class RAST:
 
     def traversal(self):
         graph = Graph()
-        if not self.is_operator:
+        if self.token in CharacterSet.mnemnoic:
+            for char in CharacterSet.mnemnoic[self.token]:
+                graph.union(char)
+            return graph
+        elif not self.is_operator:
             graph.new(self.token)
             return graph
         elif self.token == '':
