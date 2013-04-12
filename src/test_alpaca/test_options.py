@@ -4,8 +4,8 @@ unittesting for Options
 """
 
 import unittest
-from options import Options
-from options import OptionsError
+from alpaca.options import Options
+from alpaca.options import OptionsError
 
 class TestOptions(unittest.TestCase):
     def test_get_input(self):

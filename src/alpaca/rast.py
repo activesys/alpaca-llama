@@ -4,8 +4,8 @@ rast.py
 Regex Abstract Syntax Tree
 """
 
-from graph import Graph
-from charset import CharacterSet
+from alpaca.graph import Graph
+from alpaca.charset import CharacterSet
 
 class RASTError(Exception):
     pass

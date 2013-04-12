@@ -5,10 +5,10 @@ unittesting for Regex
 
 import unittest
 import copy
-from nfa import NFA
-from graph import Graph
-from regex import Regex
-from regex import RegexError
+from alpaca.nfa import NFA
+from alpaca.graph import Graph
+from alpaca.regex import Regex
+from alpaca.regex import RegexError
 
 class TestRegex(unittest.TestCase):
     def test_init(self):

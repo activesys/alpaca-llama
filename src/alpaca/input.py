@@ -4,7 +4,7 @@ Input for regex input
 """
 
 import sys
-from options import Options
+from alpaca.options import Options
 
 class InputError(Exception):
     pass

@@ -5,7 +5,7 @@ Output for output script
 
 import sys
 import os.path
-from options import Options
+from alpaca.options import Options
 
 class OutputError(Exception):
     pass

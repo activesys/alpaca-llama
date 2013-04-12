@@ -3,11 +3,11 @@ regex.py
 Implementation for Regex.
 """
 
-from syntax import SyntaxParser
-from syntax import SyntaxParserError
-from rast import RAST
-from graph import Graph
-from nfa import NFA
+from alpaca.syntax import SyntaxParser
+from alpaca.syntax import SyntaxParserError
+from alpaca.rast import RAST
+from alpaca.graph import Graph
+from alpaca.nfa import NFA
 
 class RegexError(Exception):
     pass

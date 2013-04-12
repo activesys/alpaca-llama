@@ -5,7 +5,7 @@ unit testing for table.py
 """
 
 import unittest
-from table import StateTransitionTable
+from alpaca.table import StateTransitionTable
 
 class TestStateTransitionTable(unittest.TestCase):
     def setUp(self):

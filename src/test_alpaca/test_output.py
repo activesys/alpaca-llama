@@ -4,8 +4,8 @@ unittesting for Output
 """
 
 import unittest
-from options import Options
-from output import Output
+from alpaca.options import Options
+from alpaca.output import Output
 
 class TestOutput(unittest.TestCase):
     def test_output_file(self):

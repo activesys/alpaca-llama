@@ -5,10 +5,10 @@ unittesting for NFA
 
 import unittest
 import copy
-from nfa import NFA
-from graph import Graph
-from syntax import SyntaxParser
-from regex import Regex
+from alpaca.nfa import NFA
+from alpaca.graph import Graph
+from alpaca.syntax import SyntaxParser
+from alpaca.regex import Regex
 
 class TestNFA(unittest.TestCase):
     def test_init_empyt(self):

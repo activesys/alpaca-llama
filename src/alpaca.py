@@ -6,17 +6,17 @@ Alpaca
 """
 
 import sys
-from regex import Regex
-from regex import RegexError
-from nfa import NFA
-from dfa import DFA
-from dot import Dot
-from options import Options
-from options import OptionsError
-from input import Input
-from input import InputError
-from output import Output
-from output import OutputError
+from alpaca.regex import Regex
+from alpaca.regex import RegexError
+from alpaca.nfa import NFA
+from alpaca.dfa import DFA
+from alpaca.dot import Dot
+from alpaca.options import Options
+from alpaca.options import OptionsError
+from alpaca.input import Input
+from alpaca.input import InputError
+from alpaca.output import Output
+from alpaca.output import OutputError
 
 class Alpaca:
     def main():

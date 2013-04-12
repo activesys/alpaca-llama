@@ -4,8 +4,8 @@ unittesting for Input
 """
 
 import unittest
-from input import Input
-from options import Options
+from alpaca.input import Input
+from alpaca.options import Options
 
 class TestInput(unittest.TestCase):
     def test_input_stdin(self):

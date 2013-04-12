@@ -5,7 +5,7 @@ test.py
 """
 
 import sys
-sys.path.append('../alpaca/')
+sys.path.append('../')
 
 import unittest
 from test_table import TestStateTransitionTable
