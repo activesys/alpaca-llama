@@ -14,10 +14,9 @@ from dot import Dot
 from options import Options
 from options import OptionsError
 from input import Input
+from input import InputError
 from output import Output
-
-class AlpacaError(Exception):
-    pass
+from output import OutputError
 
 class Alpaca:
     def main():
@@ -40,24 +39,32 @@ class Alpaca:
         Alpaca.translate_regex()
 
     def translate_regex():
-        texts = Input.get_regexes()
+        texts = None
+        try:
+            texts = Input.get_regexes()
+        except InputError as err:
+            print(err.args[0], file=sys.stderr)
+            return
 
         nfas = []
-        try:
-            for text in texts:
-                regex = Regex(text)
+        for i in range(len(texts)):
+            try:
+                regex = Regex(texts[i])
                 nfas.append(regex.transform())
-        except RegexError as err:
-            raise AlpacaError(err.args[0])
-
+            except RegexError as err:
+                print('SyntaxError(%d): %s' % (i+1, err.args[0]))
+                return
         nfa = NFA()
         nfa.merge(nfas)
-
         dfa = nfa.transform()
         dfa.minimize()
-
         dot = dfa.transform()
-        Output.output_script(dot.script)
+
+        try:
+            Output.output_script(dot.script)
+        except OutputError as err:
+            print(err.args[0], file=sys.stderr)
+            return
 
     def show_version():
         print('alpaca.py 1.0.0')
@@ -80,6 +87,9 @@ class Alpaca:
         print('-V')
         print('--version')
         print('    show copyright and version message and exit.')
+        print()
+        print('input-file')
+        print('    read input from \'input-file\', read input from stdin when \'input-file\' not present.')
         print()
 
 

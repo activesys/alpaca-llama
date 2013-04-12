@@ -63,7 +63,9 @@ class RAST:
         elif self.token == '[]':
             clist = []
             for child in self.children:
-                if not child.is_operator:
+                if child.token in CharacterSet.mnemnoic:
+                    clist.extend(CharacterSet.mnemnoic[child.token])
+                elif not child.is_operator:
                     clist.append(child.token)
                 else:
                     clist += CharacterSet.intersection_set(child.children[0].token, child.children[1].token)
@@ -73,7 +75,9 @@ class RAST:
         elif self.token == '[^]':
             clist = []
             for child in self.children:
-                if not child.is_operator:
+                if child.token in CharacterSet.mnemnoic:
+                    clist.extend(CharacterSet.mnemnoic[child.token])
+                elif not child.is_operator:
                     clist.append(child.token)
                 else:
                     clist += CharacterSet.intersection_set(child.children[0].token, child.children[1].token)
