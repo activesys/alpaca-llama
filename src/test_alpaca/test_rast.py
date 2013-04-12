@@ -4,10 +4,10 @@ unittesting for RAST
 """
 
 import unittest
-from alpaca.rast import RAST
-from alpaca.graph import Graph
-from alpaca.syntax import SyntaxParser
-from alpaca.charset import CharacterSet
+from alpacalib.rast import RAST
+from alpacalib.graph import Graph
+from alpacalib.syntax import SyntaxParser
+from alpacalib.charset import CharacterSet
 
 class TestRAST(unittest.TestCase):
     def test_is_empty(self):

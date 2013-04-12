@@ -5,8 +5,8 @@ unittesting for DFA
 
 import unittest
 import copy
-from alpaca.graph import Graph
-from alpaca.dfa import DFA
+from alpacalib.graph import Graph
+from alpacalib.dfa import DFA
 
 class TestDFA(unittest.TestCase):
     def test_init_empty(self):

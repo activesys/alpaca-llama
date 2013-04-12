@@ -5,9 +5,9 @@ unittesting for syntax parser.
 """
 
 import unittest
-from alpaca.rast import RAST
-from alpaca.syntax import SyntaxParser
-from alpaca.syntax import SyntaxParserError
+from alpacalib.rast import RAST
+from alpacalib.syntax import SyntaxParser
+from alpacalib.syntax import SyntaxParserError
 
 class TestSyntaxParserError(unittest.TestCase):
     def test_build_error_empty(self):

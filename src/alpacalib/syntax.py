@@ -4,9 +4,9 @@ syntax.py
 Syntax Pasrse for Regex
 """
 
-from alpaca.rast import RAST
-from alpaca.lex import LexParser
-from alpaca.charset import CharacterSet
+from alpacalib.rast import RAST
+from alpacalib.lex import LexParser
+from alpacalib.charset import CharacterSet
 
 class SyntaxParserError(Exception):
     pass

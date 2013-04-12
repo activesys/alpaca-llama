@@ -3,10 +3,10 @@ nfa.py
 Implementation of NFA
 """
 
-from alpaca.graph import Graph
-from alpaca.charset import CharacterSet
-from alpaca.setrelation import SetRelation
-from alpaca.dfa import DFA
+from alpacalib.graph import Graph
+from alpacalib.charset import CharacterSet
+from alpacalib.setrelation import SetRelation
+from alpacalib.dfa import DFA
 
 class NFA:
     def __init__(self, graph=None):

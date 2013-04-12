@@ -5,9 +5,9 @@ unittesting for graph.
 """
 
 import unittest
-from alpaca.graph import Graph
-from alpaca.graph import InvalidGraphError
-from alpaca.setrelation import SetRelation
+from alpacalib.graph import Graph
+from alpacalib.graph import InvalidGraphError
+from alpacalib.setrelation import SetRelation
 
 class TestGraph(unittest.TestCase):
     def setUp(self):

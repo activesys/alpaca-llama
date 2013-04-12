@@ -3,10 +3,10 @@ dfa.py
 Implementation for DFA
 """
 
-from alpaca.graph import Graph
-from alpaca.setrelation import SetRelation
-from alpaca.charset import CharacterSet
-from alpaca.dot import Dot
+from alpacalib.graph import Graph
+from alpacalib.setrelation import SetRelation
+from alpacalib.charset import CharacterSet
+from alpacalib.dot import Dot
 
 class DFA:
     def __init__(self, graph=None):

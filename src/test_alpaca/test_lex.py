@@ -5,8 +5,8 @@ unit testing for lex.py
 """
 
 import unittest
-from alpaca.lex import LexParser
-from alpaca.lex import TokenStrategy
+from alpacalib.lex import LexParser
+from alpacalib.lex import TokenStrategy
 
 class TestTokenStrategy(unittest.TestCase):
     def setUp(self):

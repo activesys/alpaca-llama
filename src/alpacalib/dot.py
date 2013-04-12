@@ -2,7 +2,7 @@
 dot.py
 Dot for dot script
 """
-from alpaca.charset import CharacterSet
+from alpacalib.charset import CharacterSet
 
 class Dot:
     def __init__(self):

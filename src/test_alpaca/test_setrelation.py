@@ -4,8 +4,8 @@ unittesting for SetRelation
 """
 
 import unittest
-from alpaca.setrelation import SetRelation
-from alpaca.setrelation import SetRelationError
+from alpacalib.setrelation import SetRelation
+from alpacalib.setrelation import SetRelationError
 
 class TestSetRelation(unittest.TestCase):
     def test_init(self):

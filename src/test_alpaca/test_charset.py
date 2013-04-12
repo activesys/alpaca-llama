@@ -5,8 +5,8 @@ unittesting for Character Set
 """
 
 import unittest
-from alpaca.charset import CharacterSet
-from alpaca.charset import CharacterSetError
+from alpacalib.charset import CharacterSet
+from alpacalib.charset import CharacterSetError
 
 class TestCharacterSet(unittest.TestCase):
     def test_is_valid_range(self):

@@ -4,7 +4,7 @@ lex.py
 lexical parser.
 """
 
-from alpaca.table import StateTransitionTable
+from alpacalib.table import StateTransitionTable
 
 class RegexLexError(Exception):
     pass

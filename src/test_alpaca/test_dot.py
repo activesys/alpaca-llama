@@ -4,8 +4,8 @@ unittesting for Dot
 """
 
 import unittest
-from alpaca.dot import Dot
-from alpaca.graph import Graph
+from alpacalib.dot import Dot
+from alpacalib.graph import Graph
 
 class TestDot(unittest.TestCase):
     def test_dot(self):

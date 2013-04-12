@@ -1,0 +1,7 @@
+Thanks for downloading alpaca.
+
+To install it, make sure you have Python 3.0 or greater installed.
+Then run this command from the command prompt:
+
+    python3 setup.py install
+
